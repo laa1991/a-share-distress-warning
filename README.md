@@ -38,7 +38,7 @@
 
 ---
 
-## 复跑（四条命令，全部确定性、可断点续跑）
+## 复跑（主链 11 条命令 + 判据 17 条，全部确定性、可断点续跑）
 
 ```powershell
 cd C:\dev\finlab-ml
@@ -58,7 +58,7 @@ python src/make_figures_en.py                                                   
 ⚠️ 别把同一个抓取脚本**同时**起两个进程（我在这条线上真的踩了：后台一个、前台又一个 ⇒ 两条进程抢同一个 `.csv.tmp`，
 报 `PermissionError: WinError 32`，4 次调用白跑 —— 重跑会自动补，但那是白等）。
 
-辅助诊断（都是"不解释先量"的产物）：
+辅助诊断（判据 **17 条**，都是"不解释先量"的产物）：
 
 ```powershell
 python src/diag_negative_control.py   # 负对照换 5 个种子的分布
