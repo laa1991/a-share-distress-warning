@@ -7,3 +7,8 @@ data/*.npz
 __pycache__/
 *.pyc
 data/leadtime_scores.csv
+
+# 对照台的题面/金标模板：含公告正文摘录（等于原始抓取的派生件）⇒ 不入库，一条命令可重建：
+#   python src/judge_arena.py --dry --gold 60
+data/judge_arena/*_cases.csv
+data/judge_arena/*_gold_template.csv

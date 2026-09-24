@@ -1,0 +1,22 @@
+{
+  "rev_dir": {
+    "cases": 120,
+    "baseline": {
+      "cases": 120,
+      "rule_label_coverage": 1.0,
+      "rule_agreement": 1.0,
+      "note": "规则基线的参差在**覆盖率**上（48.4% / 67.5%），不在一致率上；见文档 §2.5 与 §8"
+    },
+    "llm_baseline_recorded": "data/llm_baseline.json"
+  },
+  "st_reason": {
+    "cases": 120,
+    "baseline": {
+      "cases": 120,
+      "rule_label_coverage": 1.0,
+      "rule_agreement": 1.0,
+      "note": "规则基线的参差在**覆盖率**上（48.4% / 67.5%），不在一致率上；见文档 §2.5 与 §8"
+    },
+    "llm_baseline_recorded": null
+  }
+}
