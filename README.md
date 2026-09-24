@@ -29,7 +29,8 @@
 　**亏损模型排戴帽（0.8317）比专训戴帽模型（0.7827）还好**；名单内二级重排把头部戴帽率抬到 **13.73%**（基准 1.36%）
 🚪 **名单外的那 49 个（没亏但次年戴帽）** → [`docs/名单外的戴帽样本（49个）.md`](docs/名单外的戴帽样本（49个）.md)：
 　画像=**小、薄利、现金薄但没在变坏**；要捞到一半得把名单放到**半个市场**（2,552 家/年、命中率只剩 2.41%）⇒ **不开口子**
-🌑 **为什么它们会戴帽：没答上来**（46 条公告里只有 5 条标题带机制；巨潮详情页是 JS 壳，要取 PDF 正文 —— 未做）
+❓ **为什么戴帽（已答）** → [`docs/为什么戴帽（原因分布）.md`](docs/为什么戴帽（原因分布）.md)：
+　211 份公告正文归类 —— 「没亏但戴帽」那批 **≈64% 是治理/合规类**（内控被否 · 行政处罚 · 账户冻结 · 资金占用），纯财务类只 ≈20% ⇒ **触发规则不在报表里**
 🧾 **作品一页纸（A4 单页 · 可直接当附件）** → `docs/作品一页纸.pdf`（中文）· `docs/作品一页纸-EN.pdf`（English）
 　（源 `docs/作品一页纸.html` / `-EN.html`；**Edge headless 出 PDF**，无 pandoc 依赖。两版都是 1 页、各含两张图 —— 页数是判据，别靠眼估。）
 
@@ -71,6 +72,9 @@ python scripts/fetch_st_events.py            # 取「被实施风险警示」公
 python src/st_label.py                       # 做成可时点化的 ST 标签（952 次戴帽 / 606 家公司）
 python src/run_experiments_st.py             # 换标签重跑（A / 基线 / 负对照）
 python src/diag_st_negative_control.py --seeds 5   # ★ 负对照：pooled 能骗到 0.40–0.56，macro 才回到 0.5
+python src/st_sample_events.py                     # 列出要取正文的戴帽公告（按组去重，211 条）
+python scripts/fetch_st_pdfs.py --only data/st_event_targets.csv  # 取公告 PDF + 抽正文（可断点续跑）
+python src/classify_st_reasons.py                  # 归类「为什么戴帽」+ 两组对照（每条留证据句）
 ```
 
 ## 重出一页纸的 PDF（Edge headless，无需 pandoc）
