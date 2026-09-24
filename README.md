@@ -13,6 +13,7 @@
   **43.8% 的亏损公司从未亮过灯** ⇒ 预警的天花板不是模型，是基本面什么时候开始变难看
 
 📄 **结论与红线** → [`docs/结论.md`](docs/结论.md) ｜ 📐 **口径（含数据源的坑）** → [`docs/口径.md`](docs/口径.md) ｜ 📊 图 → `docs/figs/`
+🎯 **产品视角（愿意提前多久 → 拿到什么样的名单）** → [`docs/产品视角.md`](docs/产品视角.md) ｜ 图 `docs/figs/fig_product.png`
 🧾 **作品一页纸（A4 单页 · 可直接当附件）** → `docs/作品一页纸.pdf`（中文）· `docs/作品一页纸-EN.pdf`（English）
 　（源 `docs/作品一页纸.html` / `-EN.html`；**Edge headless 出 PDF**，无 pandoc 依赖。两版都是 1 页、各含两张图 —— 页数是判据，别靠眼估。）
 
@@ -30,7 +31,9 @@ python src/build_panel.py                                                       
 python src/run_experiments.py                                                   # ⑤ 四格对照 → data/results.json
 python src/run_leadtime_curve.py                                                # ⑥ 提前量曲线 → data/leadtime_curve.json + 逐样本分数
 python src/analyze_signal_timeline.py                                           # ⑦ 信号什么时候亮 → data/signal_timeline.json + 图
-python src/make_figures.py                                                      # ⑧ 出图（可选）
+python src/make_product_figure.py                                               # ⑧ 产品视角（提前量 × 分数 × 覆盖面）→ data/product_curve.json + 图
+python src/make_figures.py                                                      # ⑨ 出图（可选）
+python src/make_figures_en.py                                                   # ⑨b 英文版两张图（英文一页纸用）
 ```
 
 ⚠️ 别把同一个抓取脚本**同时**起两个进程（我在这条线上真的踩了：后台一个、前台又一个 ⇒ 两条进程抢同一个 `.csv.tmp`，

@@ -1,0 +1,189 @@
+{
+  "lead_days": {
+    "① 一季报披露": 361.0,
+    "② 半年报披露": 239.0,
+    "③ 三季报披露": 177.0,
+    "④ 业绩预告公布": 86.0
+  },
+  "auc": {
+    "① 一季报披露": 0.9103,
+    "② 半年报披露": 0.9427,
+    "③ 三季报披露": 0.9627,
+    "④ 业绩预告公布": 0.9987
+  },
+  "curves": {
+    "① 一季报披露": {
+      "stage": "① 一季报披露",
+      "n": 19473,
+      "pos_rate": 0.23910029271298722,
+      "by_size": {
+        "0.01": {
+          "precision": 0.9109,
+          "coverage": 0.0386,
+          "false_alarm": 0.0012
+        },
+        "0.02": {
+          "precision": 0.9161,
+          "coverage": 0.0777,
+          "false_alarm": 0.0022
+        },
+        "0.05": {
+          "precision": 0.8961,
+          "coverage": 0.1905,
+          "false_alarm": 0.0068
+        },
+        "0.10": {
+          "precision": 0.8478,
+          "coverage": 0.3593,
+          "false_alarm": 0.0197
+        },
+        "0.20": {
+          "precision": 0.7346,
+          "coverage": 0.6192,
+          "false_alarm": 0.069
+        },
+        "0.30": {
+          "precision": 0.6318,
+          "coverage": 0.7968,
+          "false_alarm": 0.1439
+        },
+        "0.50": {
+          "precision": 0.4521,
+          "coverage": 0.9487,
+          "false_alarm": 0.3584
+        }
+      }
+    },
+    "② 半年报披露": {
+      "stage": "② 半年报披露",
+      "n": 19713,
+      "pos_rate": 0.23649368437071983,
+      "by_size": {
+        "0.01": {
+          "precision": 0.9686,
+          "coverage": 0.0415,
+          "false_alarm": 0.0004
+        },
+        "0.02": {
+          "precision": 0.9662,
+          "coverage": 0.0834,
+          "false_alarm": 0.0009
+        },
+        "0.05": {
+          "precision": 0.9505,
+          "coverage": 0.205,
+          "false_alarm": 0.0032
+        },
+        "0.10": {
+          "precision": 0.9162,
+          "coverage": 0.3942,
+          "false_alarm": 0.0108
+        },
+        "0.20": {
+          "precision": 0.8068,
+          "coverage": 0.6897,
+          "false_alarm": 0.0499
+        },
+        "0.30": {
+          "precision": 0.6731,
+          "coverage": 0.8601,
+          "false_alarm": 0.1273
+        },
+        "0.50": {
+          "precision": 0.4598,
+          "coverage": 0.9763,
+          "false_alarm": 0.3522
+        }
+      }
+    },
+    "③ 三季报披露": {
+      "stage": "③ 三季报披露",
+      "n": 19862,
+      "pos_rate": 0.23507199677776658,
+      "by_size": {
+        "0.01": {
+          "precision": 0.995,
+          "coverage": 0.0433,
+          "false_alarm": 0.0001
+        },
+        "0.02": {
+          "precision": 0.9926,
+          "coverage": 0.0863,
+          "false_alarm": 0.0002
+        },
+        "0.05": {
+          "precision": 0.9879,
+          "coverage": 0.2149,
+          "false_alarm": 0.0008
+        },
+        "0.10": {
+          "precision": 0.954,
+          "coverage": 0.4138,
+          "false_alarm": 0.0059
+        },
+        "0.20": {
+          "precision": 0.8586,
+          "coverage": 0.7396,
+          "false_alarm": 0.0363
+        },
+        "0.30": {
+          "precision": 0.7069,
+          "coverage": 0.9089,
+          "false_alarm": 0.1137
+        },
+        "0.50": {
+          "precision": 0.4625,
+          "coverage": 0.9877,
+          "false_alarm": 0.3498
+        }
+      }
+    },
+    "④ 业绩预告公布": {
+      "stage": "④ 业绩预告公布",
+      "n": 10572,
+      "pos_rate": 0.43832765796443435,
+      "by_size": {
+        "0.01": {
+          "precision": 1.0,
+          "coverage": 0.0234,
+          "false_alarm": 0.0
+        },
+        "0.02": {
+          "precision": 1.0,
+          "coverage": 0.0465,
+          "false_alarm": 0.0
+        },
+        "0.05": {
+          "precision": 0.9981,
+          "coverage": 0.1164,
+          "false_alarm": 0.0002
+        },
+        "0.10": {
+          "precision": 0.9981,
+          "coverage": 0.2325,
+          "false_alarm": 0.0003
+        },
+        "0.20": {
+          "precision": 0.9991,
+          "coverage": 0.4661,
+          "false_alarm": 0.0003
+        },
+        "0.30": {
+          "precision": 0.999,
+          "coverage": 0.6985,
+          "false_alarm": 0.0005
+        },
+        "0.50": {
+          "precision": 0.8705,
+          "coverage": 0.997,
+          "false_alarm": 0.1057
+        }
+      }
+    }
+  },
+  "cheat_reference": {
+    "arm": "B 偷看未来一期（4 月决策）",
+    "auc": 0.9442,
+    "top10_precision": 0.924
+  }
+}
