@@ -1,99 +1,99 @@
 {
-  "n_stocks": 60,
+  "n_stocks": 5252,
   "cash ↔ 货币资金": {
-    "n": 2150,
-    "exact": 0.998605,
-    "lt_0_1pct": 1.0,
-    "ge_1pct": 0.0,
-    "n_ge_1pct": 0,
-    "n_codes_ge_1pct": 0
+    "n": 187176,
+    "exact": 0.998531,
+    "lt_0_1pct": 0.999428,
+    "ge_1pct": 0.000438,
+    "n_ge_1pct": 82,
+    "n_codes_ge_1pct": 59
   },
   "ar ↔ 应收账款": {
-    "n": 2108,
-    "exact": 0.996205,
-    "lt_0_1pct": 0.998102,
-    "ge_1pct": 0.001898,
-    "n_ge_1pct": 4,
-    "n_codes_ge_1pct": 2
+    "n": 185126,
+    "exact": 0.996338,
+    "lt_0_1pct": 0.997218,
+    "ge_1pct": 0.002393,
+    "n_ge_1pct": 443,
+    "n_codes_ge_1pct": 177
   },
   "inventory ↔ 存货": {
-    "n": 2107,
-    "exact": 0.997152,
-    "lt_0_1pct": 0.998102,
-    "ge_1pct": 0.001898,
-    "n_ge_1pct": 4,
-    "n_codes_ge_1pct": 2
+    "n": 182604,
+    "exact": 0.997744,
+    "lt_0_1pct": 0.998768,
+    "ge_1pct": 0.001019,
+    "n_ge_1pct": 186,
+    "n_codes_ge_1pct": 135
   },
   "total_assets ↔ 资产总计": {
-    "n": 2205,
-    "exact": 0.993197,
-    "lt_0_1pct": 0.996825,
-    "ge_1pct": 0.001814,
-    "n_ge_1pct": 4,
-    "n_codes_ge_1pct": 2
+    "n": 189939,
+    "exact": 0.991497,
+    "lt_0_1pct": 0.997526,
+    "ge_1pct": 0.001337,
+    "n_ge_1pct": 254,
+    "n_codes_ge_1pct": 178
   },
   "total_liab ↔ 负债合计": {
-    "n": 2201,
-    "exact": 0.994548,
-    "lt_0_1pct": 0.99682,
-    "ge_1pct": 0.001817,
-    "n_ge_1pct": 4,
-    "n_codes_ge_1pct": 2
+    "n": 189773,
+    "exact": 0.993434,
+    "lt_0_1pct": 0.997708,
+    "ge_1pct": 0.001338,
+    "n_ge_1pct": 254,
+    "n_codes_ge_1pct": 186
   },
   "ap ↔ 应付账款": {
-    "n": 2070,
-    "exact": 0.995169,
-    "lt_0_1pct": 0.996618,
-    "ge_1pct": 0.003382,
-    "n_ge_1pct": 7,
-    "n_codes_ge_1pct": 4
+    "n": 179178,
+    "exact": 0.997963,
+    "lt_0_1pct": 0.998839,
+    "ge_1pct": 0.000977,
+    "n_ge_1pct": 175,
+    "n_codes_ge_1pct": 126
   },
   "equity ↔ 所有者权益(或股东权益)合计": {
-    "n": 2112,
-    "exact": 0.992898,
-    "lt_0_1pct": 0.996686,
-    "ge_1pct": 0.002841,
-    "n_ge_1pct": 6,
-    "n_codes_ge_1pct": 3
+    "n": 185003,
+    "exact": 0.994157,
+    "lt_0_1pct": 0.997308,
+    "ge_1pct": 0.001449,
+    "n_ge_1pct": 268,
+    "n_codes_ge_1pct": 193
   },
   "equity ↔ 归属于母公司股东权益合计": {
-    "n": 2112,
-    "exact": 0.312027,
-    "lt_0_1pct": 0.372633,
-    "ge_1pct": 0.433712,
-    "n_ge_1pct": 916,
-    "n_codes_ge_1pct": 38
+    "n": 185003,
+    "exact": 0.229661,
+    "lt_0_1pct": 0.306979,
+    "ge_1pct": 0.51384,
+    "n_ge_1pct": 95062,
+    "n_codes_ge_1pct": 3869
   },
   "ocf ↔ 经营活动产生的现金流量净额": {
-    "n": 2256,
-    "exact": 0.998227,
-    "lt_0_1pct": 0.999113,
-    "ge_1pct": 0.000887,
-    "n_ge_1pct": 2,
-    "n_codes_ge_1pct": 2
+    "n": 194581,
+    "exact": 0.997405,
+    "lt_0_1pct": 0.998844,
+    "ge_1pct": 0.000997,
+    "n_ge_1pct": 194,
+    "n_codes_ge_1pct": 145
   },
   "icf ↔ 投资活动产生的现金流量净额": {
-    "n": 2244,
-    "exact": 0.998217,
-    "lt_0_1pct": 0.999554,
-    "ge_1pct": 0.000446,
-    "n_ge_1pct": 1,
-    "n_codes_ge_1pct": 1
+    "n": 193603,
+    "exact": 0.997887,
+    "lt_0_1pct": 0.999003,
+    "ge_1pct": 0.000899,
+    "n_ge_1pct": 174,
+    "n_codes_ge_1pct": 132
   },
   "fcf ↔ 筹资活动产生的现金流量净额": {
-    "n": 2185,
-    "exact": 0.998627,
-    "lt_0_1pct": 0.999085,
-    "ge_1pct": 0.000915,
-    "n_ge_1pct": 2,
-    "n_codes_ge_1pct": 2
+    "n": 189480,
+    "exact": 0.998158,
+    "lt_0_1pct": 0.999177,
+    "ge_1pct": 0.000781,
+    "n_ge_1pct": 148,
+    "n_codes_ge_1pct": 109
   },
   "net_cf ↔ 现金及现金等价物净增加额": {
-    "n": 2244,
-    "exact": 0.999109,
-    "lt_0_1pct": 0.999109,
-    "ge_1pct": 0.000891,
-    "n_ge_1pct": 2,
-    "n_codes_ge_1pct": 2
+    "n": 193601,
+    "exact": 0.998337,
+    "lt_0_1pct": 0.999334,
+    "ge_1pct": 0.000548,
+    "n_ge_1pct": 106,
+    "n_codes_ge_1pct": 80
   }
 }
