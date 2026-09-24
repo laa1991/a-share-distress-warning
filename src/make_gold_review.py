@@ -22,6 +22,8 @@ ARENA = ROOT / "data" / "judge_arena"
 REV_HEAD = re.compile(r"前次业绩预告情况|一、\s*预计的本期业绩情况")
 REV_AFTER = re.compile(r"修正后的预计业绩|修正后预计业绩")
 ST_ANCHOR = re.compile(r"的原因|触及《|被实施[^。]{0,12}警示的原因|占用|冻结|内控|处罚|意见")
+# 样板段：这些词一出现，后面的内容对"触发原因"没有信息量（v1 的 7 条判不了全落在这里）
+BOILER = re.compile(r"董事会关于争取撤销|争取撤销[^。]{0,8}警示的意见|风险提示|联系方式|特此公告|公司将持续关注")
 
 
 def squeeze(t: str) -> str:
@@ -40,10 +42,23 @@ def rev_excerpt(t: str) -> str:
 
 
 def st_excerpt(t: str) -> str:
+    """v2（2026-09-25 修）：v1 从**第一个**命中词起取 360 字，结果 7/60 落在「拟采取的措施」这类样板段、
+    另有 5 条把「…意见的审计报告」的主体切在切口另一侧（而「内控 vs 财务报表」正是 A/B 的分界）。
+
+    修法两件：
+    ① **先切掉样板段**（董事会措施 / 风险提示 / 联系方式 / 特此公告）；
+    ② **锚点按信息量排序**（适用情形 > 触及《 > 根据《 > 实施…警示），并**向锚点前后各取一段**
+       （决定性限定词常在锚点之前，v1 只往后取 ⇒ 主语被吃掉）。
+    """
     t = squeeze(t)
-    ms = [m.start() for m in ST_ANCHOR.finditer(t)]
-    start = ms[0] if ms else 0
-    return t[start: start + 360]
+    cuts = [m.start() for m in BOILER.finditer(t)]
+    head = t[: min(cuts)] if cuts else t
+    for pat in (r"适用情形", r"触及《", r"根据《", r"实施退市风险警示", r"实施其他风险警示", r"被实施"):
+        m = re.search(pat, head)
+        if m:
+            a = m.start()
+            return head[max(0, a - 280): a + 340]
+    return head[:400]
 
 
 def main() -> int:
@@ -68,7 +83,19 @@ def main() -> int:
         out.write_text("\n".join(lines), encoding="utf-8")
         labels = d[["id", "truth_rule"]].copy()
         labels["人工裁定"] = ""
-        labels.to_csv(ARENA / f"{task}_gold_labels.csv", index=False, encoding="utf-8-sig")
+        lab_path = ARENA / f"{task}_gold_labels.csv"
+        # ⚠️ 2026-09-25 撞过的坑：这个脚本无条件下写标签表，把上一轮**已经填好的 60 条裁定清空了**
+        #    （救回来的路径：子代理的构建脚本里按 id 写死了标签）。⇒ 有内容就**另存**，绝不覆盖。
+        if lab_path.exists():
+            old = pd.read_csv(lab_path, dtype=str).fillna("")
+            filled = old["人工裁定"].astype(str).str.strip()
+            if (filled != "").any():
+                alt = ARENA / f"{task}_gold_labels.new.csv"
+                labels.to_csv(alt, index=False, encoding="utf-8-sig")
+                print(f"⚠️ {lab_path.name} 里已有 {int((filled != '').sum())} 条裁定 —— **不覆盖**，"
+                      f"新表另存为 {alt.name}")
+                continue
+        labels.to_csv(lab_path, index=False, encoding="utf-8-sig")
         print(f"{task}: 复核册 {len(d)} 条 -> {out.name}（{out.stat().st_size/1024:.0f} KB）· 标签表 -> {task}_gold_labels.csv")
     return 0
 
