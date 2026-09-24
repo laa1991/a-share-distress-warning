@@ -1,15 +1,9 @@
-"""把诉讼当**第二条通道**：模型名单 ∪ 诉讼名单，覆盖率与精确率各变成多少？
+"""第二条通道：把「事件名单」并到模型名单上，到底值不值？
 
-上一格的结论是「事件特征加进模型几乎不加分（ΔAUC +0.0014）」。但那是**把两种信息混在一张表里**。
-产品上还有另一种用法：**两条名单并列**——模型名单（前 10%）管"分数高的"，诉讼名单管"有官司的"，
-谁进了哪条、由谁负责跟进，是业务自己决定。这一格要量的是：
+关键对照（上一版缺了这一格）：**并集把名单撑大了，那就得跟「同一份分数把门槛放低到同样大」比一比** ——
+如果单纯放宽分数就能拿到同样的覆盖率和更好的精确率，那"第二条通道"就是幻觉。
 
-- 并集的**覆盖率**：亏损公司里有多少至少进了一条名单（模型抓不到的那一半，诉讼能补多少）
-- 并集的**精确率**：名单里有多少是真亏的（多抓的代价）
-- **增量那一块**（只在诉讼名单、不在模型名单里）：它自己的精确率是多少 ⇒ 值不值得多派人复核
-
-口径：同批样本、同一套折；名单规模按**同年内**前 10%（与产品视角那页一致）。
-
+判据：同样大小的名单下，`并集` 的覆盖率/精确率 − `模型放低门槛` 的覆盖率/精确率。
 用法: python diag_union_channel.py
 """
 from __future__ import annotations
@@ -27,27 +21,49 @@ from events_features import build as build_events  # noqa: E402
 from run_experiments import CAT, FEATURES  # noqa: E402
 from run_leadtime_curve import base_label, samples_at_quarter  # noqa: E402
 
+CHANNELS = {
+    "诉讼（上年+Y Q1）": "sue_any",
+    "诉讼·近两季": "sue_any_recent",
+    "担保≥净资产50%": "gua_heavy",
+    "担保·近两季": "gua_heavy_recent",
+}
 
-def summarize(g: pd.DataFrame, mask_model, mask_sue, tag_model="模型前10%", tag_sue="有诉讼") -> dict:
-    n, npos = len(g), int(g["label"].sum())
-    m, s = mask_model, mask_sue
-    u = m | s
-    only_s = s & ~m
+
+def ev_mask(g: pd.DataFrame, name: str) -> pd.Series:
+    if name == "并集（诉讼∨担保）":
+        return (g["sue_any"] > 0) | (g["gua_heavy"] > 0)
+    if name == "并集·近两季":
+        return (g["sue_any_recent"] > 0) | (g["gua_heavy_recent"] > 0)
+    return g[CHANNELS[name]] > 0
+
+
+def eval_year(g: pd.DataFrame, name: str) -> dict:
+    g = g.copy()
+    npos = int(g["label"].sum())
+    k = max(int(round(0.10 * len(g))), 1)
+    thr = g["p"].nlargest(k).min()
+    m = g["p"] >= thr
+    e = ev_mask(g, name)
+    u = m | e
+    # ★ 对照：不放事件，直接把分数门槛放低到并集那么大
+    ku = int(u.sum())
+    thr_u = g["p"].nlargest(ku).min()
+    m2 = g["p"] >= thr_u
+    only_e = e & ~m
     return {
-        "n": n, "n_pos": npos,
-        "model": {"size": int(m.sum()), "share": round(float(m.mean()), 4),
-                  "precision": round(float(g.loc[m, "label"].mean()), 4) if m.any() else None,
-                  "coverage": round(float(g.loc[m, "label"].sum() / npos), 4)},
-        "sue": {"size": int(s.sum()), "share": round(float(s.mean()), 4),
-                "precision": round(float(g.loc[s, "label"].mean()), 4) if s.any() else None,
-                "coverage": round(float(g.loc[s, "label"].sum() / npos), 4)},
-        "union": {"size": int(u.sum()), "share": round(float(u.mean()), 4),
-                  "precision": round(float(g.loc[u, "label"].mean()), 4) if u.any() else None,
-                  "coverage": round(float(g.loc[u, "label"].sum() / npos), 4)},
-        "only_sue": {"size": int(only_s.sum()),
-                     "precision": round(float(g.loc[only_s, "label"].mean()), 4) if only_s.any() else None,
-                     "adds_true": int(g.loc[only_s, "label"].sum()),
-                     "adds_false": int(only_s.sum() - g.loc[only_s, "label"].sum())},
+        "n": len(g), "n_pos": npos,
+        "model": {"size": int(m.sum()), "cov": float(g.loc[m, "label"].sum() / npos),
+                  "prec": float(g.loc[m, "label"].mean())},
+        "ev": {"size": int(e.sum()), "cov": float(g.loc[e, "label"].sum() / npos),
+               "prec": float(g.loc[e, "label"].mean()) if e.any() else None},
+        "union": {"size": ku, "cov": float(g.loc[u, "label"].sum() / npos),
+                  "prec": float(g.loc[u, "label"].mean())},
+        "model_widened": {"size": int(m2.sum()), "cov": float(g.loc[m2, "label"].sum() / npos),
+                          "prec": float(g.loc[m2, "label"].mean())},
+        "block": {"size": int(only_e.sum()),
+                  "prec": float(g.loc[only_e, "label"].mean()) if only_e.any() else None,
+                  "adds_true": int(g.loc[only_e, "label"].sum()),
+                  "adds_false": int(only_e.sum() - g.loc[only_e, "label"].sum())},
     }
 
 
@@ -57,48 +73,53 @@ def main() -> int:
     s = samples_at_quarter(panel, 1, ann)
     ev = build_events()
     s = s.merge(ev, on=["code", "year"], how="left")
-    for c in ("sue_prev", "sue_q1", "sue_any", "gua_heavy"):
+    for c in ("sue_any", "sue_any_recent", "gua_heavy", "gua_heavy_recent"):
         s[c] = s[c].fillna(0.0)
 
-    _, pred = run(s, FEATURES + CAT)                    # A 臂：只用财报
-    pred = pred.merge(ev[["code", "year", "sue_any", "gua_heavy"]], on=["code", "year"], how="left")
-    for c in ("sue_any", "gua_heavy"):
+    _, pred = run(s, FEATURES + CAT)          # A 臂：只用财报
+    pred = pred.merge(ev, on=["code", "year"], how="left")
+    for c in ("sue_any", "sue_any_recent", "gua_heavy", "gua_heavy_recent"):
         pred[c] = pred[c].fillna(0.0)
 
-    rows, per_year = [], {}
-    for Y, g in pred.groupby("year"):
-        g = g.copy()
-        k = max(int(round(0.10 * len(g))), 1)
-        threshold = g["p"].nlargest(k).min()
-        mask_model = g["p"] >= threshold
-        mask_sue = g["sue_any"] > 0
-        st = summarize(g, mask_model, mask_sue)
-        per_year[int(Y)] = st
-        rows.append({"年": int(Y), **{f"模型{kk}": vv for kk, vv in st["model"].items()},
-                     **{f"诉讼{kk}": vv for kk, vv in st["sue"].items()},
-                     **{f"并集{kk}": vv for kk, vv in st["union"].items()},
-                     "增量块": st["only_sue"]["size"], "增量块精确率": st["only_sue"]["precision"],
-                     "多抓真亏": st["only_sue"]["adds_true"], "多带误报": st["only_sue"]["adds_false"]})
+    names = list(CHANNELS) + ["并集（诉讼∨担保）", "并集·近两季"]
+    out = {}
+    rows = []
+    for name in names:
+        per = {int(Y): eval_year(g, name) for Y, g in pred.groupby("year")}
+        out[name] = per
+        mean = lambda path: sum(p[path[0]][path[1]] for p in per.values()) / len(per)  # noqa: E731
+        rows.append({
+            "通道": name,
+            "事件覆盖": mean(("ev", "size")) / mean(("n", "n")) if False else per[2025]["ev"]["size"] / per[2025]["n"],
+            "并集规模": mean(("union", "size")),
+            "并集覆盖率": mean(("union", "cov")),
+            "并集精确率": mean(("union", "prec")),
+            "同样规模·模型放低门槛": mean(("model_widened", "cov")),
+            "同样规模·模型精确率": mean(("model_widened", "prec")),
+            "Δ覆盖率": mean(("union", "cov")) - mean(("model_widened", "cov")),
+            "Δ精确率": mean(("union", "prec")) - mean(("model_widened", "prec")),
+            "增量块精确率": sum((p["block"]["prec"] or 0) for p in per.values()) / len(per),
+            "多抓真亏": sum(p["block"]["adds_true"] for p in per.values()) / len(per),
+            "多带误报": sum(p["block"]["adds_false"] for p in per.values()) / len(per),
+        })
 
     tab = pd.DataFrame(rows)
-    print("逐年（测试年 2022–2025，① 一季报那一格）：")
-    print(tab[["年", "模型size", "模型precision", "模型coverage", "诉讼size", "诉讼precision",
-               "并集size", "并集precision", "并集coverage", "增量块", "增量块精确率", "多抓真亏", "多带误报"]]
-          .to_string(index=False))
+    print(f"基准：模型前 10% 覆盖率 {sum(p['model']['cov'] for p in out[names[0]].values())/4:.2%} · "
+          f"精确率 {sum(p['model']['prec'] for p in out[names[0]].values())/4:.2%}（四年平均）\n")
+    show = tab.copy()
+    for c in show.columns:
+        if c != "通道":
+            show[c] = show[c].round(4)
+    print(show.to_string(index=False))
 
-    agg = tab[["模型coverage", "诉讼coverage", "并集coverage", "模型precision", "诉讼precision", "并集precision",
-               "多抓真亏", "多带误报"]].mean()
-    print("\n四年的平均：")
-    print(f"  模型前 10%：覆盖率 {agg['模型coverage']:.2%} · 精确率 {agg['模型precision']:.2%}")
-    print(f"  诉讼名单　：覆盖率 {agg['诉讼coverage']:.2%} · 精确率 {agg['诉讼precision']:.2%}")
-    print(f"  并集　　　：覆盖率 {agg['并集coverage']:.2%}（{agg['并集coverage'] - agg['模型coverage']:+.2%}）"
-          f" · 精确率 {agg['并集precision']:.2%}（{agg['并集precision'] - agg['模型precision']:+.2%}）")
-    print(f"  增量块（只在诉讼名单里）：平均每年多抓 {agg['多抓真亏']:.0f} 家真亏、多带 "
-          f"{agg['多带误报']:.0f} 家误报 ⇒ 一块换一块")
+    print("\n★ 判据（同样规模的名单）：Δ覆盖率 > 0 ⇒ 事件拼出来的确实比单纯放宽分数更会挑；")
+    print("   Δ精确率 < 0 ⇒ 代价是名单更脏。两个都看，不看一个。")
 
     (ROOT / "data" / "union_channel.json").write_text(
-        json.dumps({"per_year": per_year, "mean": {k: round(float(v), 4) for k, v in agg.items()}},
-                   ensure_ascii=False, indent=2), encoding="utf-8")
+        json.dumps({"benchmark_model": {k: v for k, v in out[names[0]][2025]["model"].items()},
+                    "per_channel": {n: {str(k): v for k, v in p.items()} for n, p in out.items()},
+                    "summary": tab.round(5).to_dict("records")}, ensure_ascii=False, indent=2),
+        encoding="utf-8")
     print("\n读数 -> data/union_channel.json")
     return 0
 
