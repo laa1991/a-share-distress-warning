@@ -1,0 +1,14 @@
+{
+  "year": 2023,
+  "list_size": 483,
+  "events": 2629,
+  "changes": 2629,
+  "in_list_changes": 465,
+  "days_with_changes": 101,
+  "peak_per_day": 981,
+  "cross_check": {
+    "replay_changes": 2629,
+    "daily_changes": 2629,
+    "match": true
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "year": 2024,
+  "list_size": 503,
+  "events": 2630,
+  "changes": 2630,
+  "in_list_changes": 482,
+  "days_with_changes": 70,
+  "peak_per_day": 458,
+  "cross_check": {
+    "replay_changes": 2630,
+    "daily_changes": 2630,
+    "match": true
+  }
+}
