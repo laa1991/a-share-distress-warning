@@ -1,9 +1,0 @@
-作品一页纸（中/英）：A4 单页 + 两张图，Edge headless 出 PDF
-
-- docs/作品一页纸.html → docs/作品一页纸.pdf（中文，1 页）
-- docs/作品一页纸-EN.html → docs/作品一页纸-EN.pdf（English，1 页）
-- 版式：正文 9.05pt · 两图并排（中文 180mm / 英文 172mm）
-- 判据：PDF 里 /Type /Page 个数 = 1，且 /Subtype /Image = 2（不靠眼看截图）
-- 两个坑写进 README：① 页数看 PDF 不靠截图；② 量版面的变体必须放 docs/ 里，
-  放 %TEMP% 时图加载不到 ⇒ 版面变短 ⇒ 假绿（白测两轮）
-- README 增加「重出一页纸的 PDF」一节
