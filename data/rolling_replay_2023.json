@@ -1,0 +1,16 @@
+{
+  "year": 2023,
+  "events": 2959,
+  "events_gated": 2691,
+  "dropped_by_pit": 268,
+  "applied": 2629,
+  "changes": 2629,
+  "in_list_changes": 465,
+  "stated_end": 465,
+  "list_size": 483,
+  "window": [
+    "2023-07-18",
+    "2024-04-30"
+  ],
+  "orphan": 0
+}

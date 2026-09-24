@@ -1,0 +1,16 @@
+{
+  "year": 2024,
+  "events": 2897,
+  "events_gated": 2669,
+  "dropped_by_pit": 228,
+  "applied": 2630,
+  "changes": 2630,
+  "in_list_changes": 482,
+  "stated_end": 482,
+  "list_size": 503,
+  "window": [
+    "2024-01-24",
+    "2025-07-05"
+  ],
+  "orphan": 0
+}
