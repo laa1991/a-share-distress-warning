@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <title>Financial Distress Warning — What "Getting the Data Right" Is Worth (One-Pager)</title>
 <style>
-  @page { size: A4; margin: 11mm 12mm; }
+  @page { size: A4; margin: 9mm 11mm; }
   * { box-sizing: border-box; }
   body { font-family: "Segoe UI", sans-serif; color: #1a1a1a;
-         font-size: 9.05pt; line-height: 1.28; margin: 0; }
-  h1 { font-size: 14.5pt; margin: 0 0 2px; letter-spacing: .2px; }
-  .sub { color: #555; font-size: 8.3pt; margin-bottom: 6px; }
-  h2 { font-size: 10pt; margin: 7px 0 2px; padding-bottom: 1.2px; border-bottom: 1.4px solid #1a1a1a; }
+         font-size: 8.6pt; line-height: 1.25; margin: 0; }
+  h1 { font-size: 13.8pt; margin: 0 0 2px; letter-spacing: .2px; }
+  .sub { color: #555; font-size: 8pt; margin-bottom: 5px; }
+  h2 { font-size: 9.8pt; margin: 6px 0 2px; padding-bottom: 1.2px; border-bottom: 1.4px solid #1a1a1a; }
   ul { margin: 1px 0 0; padding-left: 13px; }
   li { margin: 1px 0; }
   b, strong { color: #000; }
@@ -31,7 +31,7 @@
 
 <h1>Financial Distress Warning — What "Getting the Data Right" Is Worth</h1>
 <div class="sub">An end-to-end reproducible LightGBM deployment: <b>public filings → a risk list</b>, with <b>who could see what, and when</b> turned into a measurable score gap · 2026-09 ·
-local repo <code>C:\dev\finlab-ml</code> (6 commits · 8 commands to rerun · public repo pending)</div>
+local repo <code>C:\dev\finlab-ml</code> (33 commits · 10 commands to rerun · public repo pending)</div>
 
 <h2>Problem</h2>
 <ul>
@@ -58,6 +58,7 @@ local repo <code>C:\dev\finlab-ml</code> (6 commits · 8 commands to rerun · pu
   <li><b>The 3.4 points from "peeking" ≈ the legitimate score of simply waiting until August</b> (0.9442 vs <b>0.9427</b>) ⇒ <span class="hl">what is stolen is not a stronger model, it is lead time</span>: how much score would you give up to know this much earlier? (Arm A is stable: 0.891/0.896/0.922/0.928 by year; seed range 0.001.)</li>
   <li><b>When does the signal light up</b>: share of eventual losers already in the top decile — <b>Apr 35.6% → Aug 38.5% → Oct 40.1%</b> (false alarms 2.0% → 0.6%); <b>43.8% of losers never light up</b> ⇒ <span class="hl">the ceiling is not the model, it is the day the fundamentals start looking bad</span>.</li>
   <li><b>A trap inside the source</b>: EastMoney's "announcement date" is not the first filing date but the <i>latest</i> filing carrying those figures — for statements with prior-year comparatives it is <b>365 days late</b>; evidence: Moutai 2016Q1 filed <code>2016-04-21</code>, EastMoney's income statement says <code>2017-04-25</code>.</li>
+  <li><b>Switching to the regulator's own target</b> (a self-built as-of "risk-warning" label: <b>952 events / 606 firms</b>): AUC <b>0.910 → 0.813</b>, but the top decile now <b>catches 49% of all risk-warning events</b> (36% for the loss label) at <b>lift 4.89×</b> ⇒ <span class="hl">the rarer the target, the harder the AUC — and the more the list is worth</span>.</li>
 </ul>
 
 <div class="figs">
@@ -70,18 +71,19 @@ local repo <code>C:\dev\finlab-ml</code> (6 commits · 8 commands to rerun · pu
 <h2>The one methodology worth keeping</h2>
 <ul>
   <li><b>Never subtract two scores from different samples</b>: arm C's 0.9246 vs arm A's 0.9103 looks like +1.4 points, but the test sets differ; restricting A to C's samples gives <b>0.9122</b> ⇒ the real gap is <b>+1.24</b>.</li>
-  <li><b>A negative control needs a distribution, not a point</b>: one shuffled seed reads 0.5488 ("suspiciously high"), five seeds give <b>0.4993 ± 0.0637</b> (0.403–0.583) and only then does it land on 0.5. <b>Across stages, compare within-stage percentiles, keep the denominator identical, beware of ties</b> (<code>docs/口径.md</code>).</li>
+  <li><b>"Separable" ≠ "incremental"</b>: lawsuit/guarantee signals separate losers by <b>17.6 points</b> on their own, yet add only <b>+0.0014</b> AUC; and widening the list with them is <b>dominated by the model's own list at the same size</b> — that made me <b>retract</b> a verdict.</li>
+  <li><b>A negative control needs a distribution — read as macro, not pooled</b>: a no-signal model reads <b>0.555</b> or <b>0.407</b> pooled; macro returns to <b>0.5</b>. Across stages, compare within-stage percentiles (<code>docs/口径.md</code>).</li>
 </ul>
 
 <h2>Honest boundaries</h2>
 <ul>
-  <li>Label is <b>"annual loss", not an "ST flag"</b>; <b>delisted firms are missing</b> (base rate understated); <b>only dates were reconciled against a second source, the panel values were not</b>. The pre-announcement step is a <b>subset</b> (43.8% base rate); the flash-report step is <b>not doable</b> — <b>"cannot be done" and "not done" are reported separately</b>. And do not read the <b>96.2% precision</b> as recall: that list covers only <b>40%</b> of all losers.</li>
+  <li>Main table uses <b>"annual loss"</b>; the <b>as-of risk-warning label exists</b> as a second set of readings, but has only <b>20–74 positives a year</b> ⇒ four years must be pooled. <b>Delisted firms are missing</b>; <b>dates and panel values were both reconciled in full</b> (net profit matches by name only 23%, 99.6% once aligned).</li>
+  <li>Do not read the <b>96.2% precision</b> as recall (that list covers only <b>40%</b> of losers); the pre-announcement step is a <b>subset</b>, the flash-report step is <b>not doable</b>. <b>"Why firms get flagged" was not answered</b> (titles carry no reason, the CNINFO page is a JS shell) — <b>"not doable" and "not done" are reported separately</b>.</li>
 </ul>
 
 <div class="foot">
-  <b>Entry points</b>: local repo <code>C:\dev\finlab-ml</code> (a git repo · 10 commands, end-to-end reproducible · generated artefacts not committed) ·
-  <b>calibration</b> <code>docs/口径.md</code> · <b>findings &amp; red lines</b> <code>docs/结论.md</code> ·
-  <b>product view</b> <code>docs/产品视角.md</code> · <b>figures</b> <code>docs/figs/</code> (eight) · <b>fetch ledger</b> <code>data/fetch_*.csv</code>
+  <b>Entry points</b>: <code>C:\dev\finlab-ml</code> (git · 33 commits · 10 commands, end-to-end reproducible · artefacts not committed) ·
+  <b>calibration</b> <code>docs/口径.md</code> · <b>findings &amp; red lines</b> <code>docs/结论.md</code> · <b>nine documents</b> <code>docs/</code> · <b>figures</b> <code>docs/figs/</code> (eight)
 </div>
 
 </body>
