@@ -1,7 +1,7 @@
 # 数据与产物：可复算但不必入库（四步命令能重新生成）
 data/raw/
 data/panel.pkl
-data/preds.npz
+data/*.npz
 *.log
 
 __pycache__/
