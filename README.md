@@ -23,6 +23,8 @@
 🎯 **产品视角（愿意提前多久 → 拿到什么样的名单）** → [`docs/产品视角.md`](docs/产品视角.md) ｜ 图 `docs/figs/fig_product.png`
 🔧 **报表外事件（诉讼/担保）值得开一格吗** → [`docs/报表外事件-值得开一格吗.md`](docs/报表外事件-值得开一格吗.md)：**单看差 17.6 个点；加进模型只值 +0.14 分 AUC（3 种子复测）；当第二条通道也被「同等规模的模型名单」支配（Δ覆盖率 −6 到 −20 点）⇒ 不开**
 🎓 **两个教具** → [`docs/教学-LightGBM（八行走一遍）.md`](docs/教学-LightGBM（八行走一遍）.md) · [`docs/教学-一家真实公司走一遍.md`](docs/教学-一家真实公司走一遍.md)
+🏷 **换标签：被实施风险警示（*ST/ST）** → [`docs/换标签-被实施风险警示.md`](docs/换标签-被实施风险警示.md)：AUC 0.910 → **0.813**，
+　但**前 10% 名单抓住 49% 的戴帽事件（亏损标签只有 36%）**、lift **4.89×** —— 目标越稀有，AUC 越难高、名单越值钱
 🧾 **作品一页纸（A4 单页 · 可直接当附件）** → `docs/作品一页纸.pdf`（中文）· `docs/作品一页纸-EN.pdf`（English）
 　（源 `docs/作品一页纸.html` / `-EN.html`；**Edge headless 出 PDF**，无 pandoc 依赖。两版都是 1 页、各含两张图 —— 页数是判据，别靠眼估。）
 
@@ -60,6 +62,10 @@ python src/diag_value_crosscheck.py --n 40   # 数值层双源对账：东财 vs
 python scripts/fetch_cg_events.py            # 报表外事件取数（巨潮 诉讼/担保，按季度窗口，44×2 次调用）
 python src/diag_offstatement_events.py       # 探针：事件单看分得开吗（分得开 ≠ 加得进）
 python src/diag_events_ablation.py --seeds 3 # 消融：真加进去值多少分（+0.0014 ± 0.0004）
+python scripts/fetch_st_events.py            # 取「被实施风险警示」公告（巨潮检索 keyword=风险警示，按年 12 次调用）
+python src/st_label.py                       # 做成可时点化的 ST 标签（952 次戴帽 / 606 家公司）
+python src/run_experiments_st.py             # 换标签重跑（A / 基线 / 负对照）
+python src/diag_st_negative_control.py --seeds 5   # ★ 负对照：pooled 能骗到 0.40–0.56，macro 才回到 0.5
 ```
 
 ## 重出一页纸的 PDF（Edge headless，无需 pandoc）
