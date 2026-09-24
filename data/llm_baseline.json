@@ -1,0 +1,13 @@
+{
+  "n": 60,
+  "ok": 60,
+  "agreement": 0.5167,
+  "p50_ms": 812.5,
+  "p95_ms": 1169.6,
+  "in_tok": 61565,
+  "out_tok": 885,
+  "conf_median": 1.0,
+  "conf_uncertain_share": 0.0,
+  "model": "deepseek-chat",
+  "n_per_class": 20
+}
