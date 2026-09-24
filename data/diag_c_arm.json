@@ -1,0 +1,9 @@
+{
+  "A_on_full_test": 0.9103,
+  "A_on_C_subset": 0.9122,
+  "n_full": 19473,
+  "n_subset": 5908,
+  "subset_pos_rate": 0.2422,
+  "C_on_its_own_subset": 0.9246,
+  "C_auc_minus_A_on_same_subset": 0.0124
+}
