@@ -34,8 +34,9 @@ def score(name: str, path: Path) -> dict:
 
 
 def main() -> int:
-    rows = [score("v1（旧摘录）", A / "st_reason_gold_labels.v1-reviewed.csv"),
-            score("v2（修后摘录）", A / "st_reason_gold_labels.v2.csv")]
+    rows = [score("v1（窗口·只往后）", A / "st_reason_gold_labels.v1-reviewed.csv"),
+            score("v2（切样板段+锚点前后）", A / "st_reason_gold_labels.v2.csv"),
+            score("v4（整篇全文）", A / "st_reason_gold_labels.v4.csv")]
     for r in rows:
         print(f"{r['表']}：n={r['n']} · 可判 {r['可判']}（{r['可判率']:.1%}）· 判不了 {r['判不了']} · "
               f"与规则一致 **{r['一致率']:.1%}**（{r['与规则一致']}/{r['可比条数']}）")

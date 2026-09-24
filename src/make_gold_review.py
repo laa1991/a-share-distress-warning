@@ -70,7 +70,7 @@ def main() -> int:
             lines.append(f"**[{i+1}] {r['id']}**")
             lines.append("")
             lines.append("```")
-            lines.append(fn(str(r["text"]))[:900])
+            lines.append(fn(str(r["text"])))
             lines.append("```")
             lines.append("")
         out = ARENA / f"{task}_gold_review.md"
