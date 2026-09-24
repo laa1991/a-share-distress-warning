@@ -16,6 +16,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import random
+import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -27,18 +30,43 @@ DATA = ROOT / "data"
 CACHE = DATA / "raw" / "sina"
 PANEL = DATA / "panel.pkl"
 
+_lock = threading.Lock()
+_progress = {"done": 0, "fetched": 0, "cached": 0, "failed": 0}
+
 
 def sina_symbol(code: str) -> str:
     return ("sh" if code[0] in "659" else "sz") + code
 
 
-def fetch_one(code: str) -> str:
+def fetch_one(code: str, tries: int = 3) -> str:
+    """抓一只股票的利润表；已缓存就跳过（⇒ 断点续跑）。失败重试，最终失败只记录不抛。"""
     out = CACHE / f"{code}.csv"
     if out.exists() and out.stat().st_size > 100:
-        return "cached"
-    df = ak.stock_financial_report_sina(stock=sina_symbol(code), symbol="利润表")
-    df.to_csv(out, index=False, encoding="utf-8-sig")
-    return "fetched"
+        status = "cached"
+    else:
+        status = "failed"
+        for i in range(tries):
+            try:
+                df = ak.stock_financial_report_sina(stock=sina_symbol(code), symbol="利润表")
+                if df is None or len(df) == 0:
+                    raise RuntimeError("empty")
+                tmp = CACHE / f"{code}.csv.tmp"
+                df.to_csv(tmp, index=False, encoding="utf-8-sig")
+                tmp.replace(out)          # 原子改名：半截文件不会冒充成品
+                status = "fetched"
+                break
+            except Exception as exc:  # noqa: BLE001
+                if i == tries - 1:
+                    status = f"failed:{type(exc).__name__}"
+                else:
+                    time.sleep(0.5 * (i + 1) + random.random() * 0.5)
+    with _lock:
+        _progress["done"] += 1
+        _progress[status if status in _progress else "failed"] += 1
+        if _progress["done"] % 250 == 0:
+            print(f"  … {_progress['done']} 已完成（新抓 {_progress['fetched']} · 缓存 {_progress['cached']} "
+                  f"· 失败 {_progress['failed']}）", flush=True)
+    return status
 
 
 def load_sina(code: str) -> pd.DataFrame | None:
@@ -135,6 +163,19 @@ def main() -> int:
         print("  差异最大的 5 条：")
         print(worst.to_string(index=False, float_format=lambda x: f"{x:,.0f}" if abs(x) > 100 else f"{x:.6f}"))
         out[name]["worst"] = worst.assign(period=worst["period"].astype(str)).to_dict("records")
+
+        # 重述率：差 ≥1% 的按年分布 + 涉及多少只股票（全量跑完要的就是这个数）
+        big = sub[sub["rel"] >= 1e-2].copy()
+        big["year"] = (big["period"] // 10000).astype(int)
+        out[name]["mismatch_ge_1pct"] = {
+            "n": int(len(big)), "share": round(float(len(big) / max(len(sub), 1)), 6),
+            "codes": sorted(big["code"].unique().tolist())[:200],
+            "n_codes": int(big["code"].nunique()),
+            "by_year": {str(k): int(v) for k, v in big.groupby("year").size().items()},
+        }
+        if len(big):
+            print(f"  差 ≥1%（重述/口径不同）的：{len(big)} 条 = {len(big)/len(sub):.2%}，"
+                  f"涉及 {big['code'].nunique()} 只；按年 {out[name]['mismatch_ge_1pct']['by_year']}")
 
     (DATA / "value_crosscheck.json").write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
     print("\n读数 ->", DATA / "value_crosscheck.json")
