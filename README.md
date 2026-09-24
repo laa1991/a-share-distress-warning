@@ -21,6 +21,8 @@
 
 📄 **结论与红线** → [`docs/结论.md`](docs/结论.md) ｜ 📐 **口径（含数据源的坑）** → [`docs/口径.md`](docs/口径.md) ｜ 📊 图 → `docs/figs/`
 🎯 **产品视角（愿意提前多久 → 拿到什么样的名单）** → [`docs/产品视角.md`](docs/产品视角.md) ｜ 图 `docs/figs/fig_product.png`
+🔧 **报表外事件（诉讼/担保）值得开一格吗** → [`docs/报表外事件-值得开一格吗.md`](docs/报表外事件-值得开一格吗.md)：**单看差 17.6 个点，加进去只值 +0.14 分 AUC（3 种子复测）**
+🎓 **两个教具** → [`docs/教学-LightGBM（八行走一遍）.md`](docs/教学-LightGBM（八行走一遍）.md) · [`docs/教学-一家真实公司走一遍.md`](docs/教学-一家真实公司走一遍.md)
 🧾 **作品一页纸（A4 单页 · 可直接当附件）** → `docs/作品一页纸.pdf`（中文）· `docs/作品一页纸-EN.pdf`（English）
 　（源 `docs/作品一页纸.html` / `-EN.html`；**Edge headless 出 PDF**，无 pandoc 依赖。两版都是 1 页、各含两张图 —— 页数是判据，别靠眼估。）
 
@@ -55,6 +57,9 @@ python src/diag_c_arm.py              # C 臂的 +1.2 分：把 A 限制到同�
 python src/diag_yjyg_integrity.py     # 预告文件完整性（那两个进程抢同一 .tmp 之后做的对账）
 python src/diag_yjkb_dates.py         # 快报「公告日期」为什么不能用（67.8% 的行为负）
 python src/diag_value_crosscheck.py --n 40   # 数值层双源对账：东财 vs 新浪（净利润同名不同物：归母 vs 含少数股东）
+python scripts/fetch_cg_events.py            # 报表外事件取数（巨潮 诉讼/担保，按季度窗口，44×2 次调用）
+python src/diag_offstatement_events.py       # 探针：事件单看分得开吗（分得开 ≠ 加得进）
+python src/diag_events_ablation.py --seeds 3 # 消融：真加进去值多少分（+0.0014 ± 0.0004）
 ```
 
 ## 重出一页纸的 PDF（Edge headless，无需 pandoc）
