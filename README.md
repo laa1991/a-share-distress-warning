@@ -31,6 +31,8 @@
 　画像=**小、薄利、现金薄但没在变坏**；要捞到一半得把名单放到**半个市场**（2,552 家/年、命中率只剩 2.41%）⇒ **不开口子**
 ❓ **为什么戴帽（已答）** → [`docs/为什么戴帽（原因分布）.md`](docs/为什么戴帽（原因分布）.md)：
 　211 份公告正文归类 —— 「没亏但戴帽」那批 **≈64% 是治理/合规类**（内控被否 · 行政处罚 · 账户冻结 · 资金占用），纯财务类只 ≈20% ⇒ **触发规则不在报表里**
+🎯 **只能盯一件事，盯哪一类** → [`docs/盯哪一类（戴帽原因×名单）.md`](docs/盯哪一类（戴帽原因×名单）.md)：
+　同一张名单对**财务类**戴帽前 10% 抓 **52.9%**、对**合规/治理类**只有 38.5%（其中"没亏也戴帽"那半仅 **12.5%**，放到前 30% 才 37.5%）⇒ **财报名单盯财务类，合规类走公告监控**
 🧾 **作品一页纸（A4 单页 · 可直接当附件）** → `docs/作品一页纸.pdf`（中文）· `docs/作品一页纸-EN.pdf`（English）
 　（源 `docs/作品一页纸.html` / `-EN.html`；**Edge headless 出 PDF**，无 pandoc 依赖。两版都是 1 页、各含两张图 —— 页数是判据，别靠眼估。）
 
@@ -75,6 +77,7 @@ python src/diag_st_negative_control.py --seeds 5   # ★ 负对照：pooled 能�
 python src/st_sample_events.py                     # 列出要取正文的戴帽公告（按组去重，211 条）
 python scripts/fetch_st_pdfs.py --only data/st_event_targets.csv  # 取公告 PDF + 抽正文（可断点续跑）
 python src/classify_st_reasons.py                  # 归类「为什么戴帽」+ 两组对照（每条留证据句）
+python src/diag_reason_channels.py                 # ★ 戴帽原因 × 名单：三类各抓到多少（该盯哪一类）
 ```
 
 ## 重出一页纸的 PDF（Edge headless，无需 pandoc）
