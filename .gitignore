@@ -6,3 +6,4 @@ data/*.npz
 
 __pycache__/
 *.pyc
+data/leadtime_scores.csv
