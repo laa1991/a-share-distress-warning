@@ -37,6 +37,10 @@
   对齐后剩 **0.22% 是重述率**，且 2016 年 121 条 → 2024 年 2 条（老数据才会被追溯调整）
 - 第二批科目（资产负债 + 现金流，全量）：货币资金 **99.85%** · 应收账款 99.63% · 存货 99.77% · 总资产 99.15% · 总负债 99.34% 精确相等；
   **「股东权益」对含少数股东的 99.42%、对归母只有 22.97%** ⇒ **歧义是逐科目的**（同一个东财，净利润取归母、权益取含少数股东）
+- 🧪 **判断器对照台（有裁判的考卷）**：**120 道**戴帽原因题 + 120 道修订方向题，**真值 120/120 逐条裁决过**（两位独立读者，判不了率 **0%**）⇒
+  插一个"只下判断不说话"的判断器进来就能出**四轴读数**（延迟 · 每千条成本 · 复算性 · **校准**）；
+  现有基线：规则标签 vs 裁决 **71.7% / 88.9%** · 自家量的 LLM 基线置信度**中位 1.00**、不确定带 **0.0%**
+  （`python src/judge_arena.py --dry` · 读数卡 `python src/st_gold_scorecard.py`）
 
 ---
 
@@ -80,6 +84,18 @@ python src/st_sample_events.py                     # 列出要取正文的戴帽
 python scripts/fetch_st_pdfs.py --only data/st_event_targets.csv  # 取公告 PDF + 抽正文（可断点续跑）
 python src/classify_st_reasons.py                  # 归类「为什么戴帽」+ 两组对照（每条留证据句）
 python src/diag_reason_channels.py                 # ★ 戴帽原因 × 名单：三类各抓到多少（该盯哪一类）
+```
+
+**2026-09-24/25 新增（滚动链 + 判断器对照台，判据 7 条）**：
+
+```powershell
+python src/rolling_replay.py --year 2024            # ★ 滚动链离线回放：名单 + 每条变更的理由（判据：可溯源，orphan=0）
+python src/rolling_daily.py --year 2024             # ★ 日更循环：逐日 diff + 变更台账（与回放对账必须一致）
+python src/gates.py --selftest                      # 两道确定性闸的自检（PIT 逐公司闸 / 右端截断，复现实测四数）
+python src/diag_judge_efficiency.py                 # GBDT 的延迟 / 吞吐 / 复算性 / 校准（单条 p50 2.0 ms · 30 万行/秒 · 不确定带 29.07%）
+python src/diag_llm_baseline.py --n-per-class 20    # 自家量的 LLM 基线（60 条：一致率 51.7% · 置信度中位 1.00 · 不确定带 0.0%）
+python src/judge_arena.py --dry --gold 60           # ★ 有裁判的考卷：建题 + 规则基线 + 判断器请求体形状（不联网）
+python src/st_gold_scorecard.py                     # 金标读数卡：可判率 / 判不了率 / 规则 vs 裁决（120/120 有真值）
 ```
 
 ## 重出一页纸的 PDF（Edge headless，无需 pandoc）
