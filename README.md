@@ -13,6 +13,8 @@
   **43.8% 的亏损公司从未亮过灯** ⇒ 预警的天花板不是模型，是基本面什么时候开始变难看
 
 📄 **结论与红线** → [`docs/结论.md`](docs/结论.md) ｜ 📐 **口径（含数据源的坑）** → [`docs/口径.md`](docs/口径.md) ｜ 📊 图 → `docs/figs/`
+🧾 **作品一页纸（A4 单页 · 可直接当附件）** → `docs/作品一页纸.pdf`（中文）· `docs/作品一页纸-EN.pdf`（English）
+　（源 `docs/作品一页纸.html` / `-EN.html`；**Edge headless 出 PDF**，无 pandoc 依赖。两版都是 1 页、各含两张图 —— 页数是判据，别靠眼估。）
 
 ---
 
@@ -43,6 +45,20 @@ python src/diag_c_arm.py              # C 臂的 +1.2 分：把 A 限制到同�
 python src/diag_yjyg_integrity.py     # 预告文件完整性（那两个进程抢同一 .tmp 之后做的对账）
 python src/diag_yjkb_dates.py         # 快报「公告日期」为什么不能用（67.8% 的行为负）
 ```
+
+## 重出一页纸的 PDF（Edge headless，无需 pandoc）
+
+```powershell
+$edge = 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+foreach ($n in '作品一页纸','作品一页纸-EN') {
+  & $edge --headless=new --disable-gpu --no-pdf-header-footer `
+      --print-to-pdf="docs\$n.pdf" ([System.Uri]::new("$PWD\docs\$n.html").AbsoluteUri)
+}
+```
+
+⚠️ 两个坑（都踩过）：① 判「是不是一页」看 **PDF 里的 `/Type /Page` 个数**，别靠眼看截图；
+② **量版面时变体文件必须放在 `docs/` 里** —— 放 `%TEMP%` 时图片的相对路径解析不到，图没加载 ⇒ 版面变短 ⇒ **量出来是假绿**（我因此白测了两轮）。
+一页纸在 9.05pt 正文 + 两张图 180mm（中文）/ 172mm（英文）下刚好一页；动字号就要重新量页数。
 
 > **仓库里没有 `data/`**（取数产物与面板共 ~270 MB，`gitignore` 掉了）。按上面五步跑一遍即可重建；
 > 每次取数都在 `data/fetch_*.csv` 留一行账（表 / 报告期 / 行数 / 耗时 / 状态）。

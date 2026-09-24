@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>财务风险预警 · 数据用对没有值多少分（作品一页纸）</title>
+<style>
+  @page { size: A4; margin: 11mm 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Microsoft YaHei", "Segoe UI", sans-serif; color: #1a1a1a;
+         font-size: 9.05pt; line-height: 1.32; margin: 0; }
+  h1 { font-size: 16pt; margin: 0 0 2px; letter-spacing: .2px; }
+  .sub { color: #555; font-size: 9pt; margin-bottom: 7px; }
+  h2 { font-size: 10.6pt; margin: 8px 0 3px; padding-bottom: 1.4px; border-bottom: 1.4px solid #1a1a1a; }
+  ul { margin: 2px 0 0; padding-left: 14px; }
+  li { margin: 1.2px 0; }
+  b, strong { color: #000; }
+  .foot { margin-top: 7px; padding-top: 4px; border-top: 1px solid #bbb; color: #444; font-size: 8.8pt; }
+  code { background: #f2f2f2; padding: 0 2px; border-radius: 2px; font-size: 8.9pt; }
+  .hl { background: #ffe9a8; padding: 0 2px; }
+  .figs { display: flex; gap: 10px; margin: 6px auto 0; max-width: 180mm; }
+  .figs figure { flex: 1; margin: 0; }
+  .figs img { width: 100%; border: 1px solid #ddd; }
+  .figs figcaption { color: #444; font-size: 8.4pt; line-height: 1.25; margin-top: 2px; }
+  table { border-collapse: collapse; width: 100%; font-size: 9pt; margin-top: 3px; }
+  th, td { border-bottom: 1px solid #ddd; padding: 1px 4px; text-align: left; }
+  th { background: #f4f4f4; font-weight: 600; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<h1>财务风险预警 · 数据用对没有值多少分</h1>
+<div class="sub">一个端到端可复跑的 LightGBM 落地：<b>公开定期报告 → 风险名单</b>，并把「谁在什么时刻能看见什么」变成可量化的分数差 · 2026-09 ·
+本地仓库 <code>C:\dev\finlab-ml</code>（6 笔提交 · 8 条命令复跑 · 公开仓待定）</div>
+
+<h2>问题</h2>
+<ul>
+  <li>风控模型「离线好看、上线不行」，多数不是模型问题，是<b>数据用错</b>：拿还没披露的报表当输入、用未来的样本训练、把「最近一次披露日」当成首次披露日。</li>
+  <li>这类错<b>不报警</b>：跑得通、分数更高、看着更漂亮 ⇒ 每格都要有一条<b>不用人当裁判</b>的判据。</li>
+</ul>
+
+<h2>做了什么</h2>
+<ul>
+  <li><b>面板</b>：A 股 2016Q1–2026Q2 · <b>42 期 · 195,707 行 · 5,252 只股票</b>（东财四张批量表 + <b>巨潮披露时间表</b>当 PIT 锚点）。<b>任务</b>：样本 =（代码, 年份）取<b>一季报</b>，标签 = <b>当年年报亏损</b>，决策时刻 = 一季报<b>实际披露日</b>（中位 4/23）⇒ 真实前瞻 8–12 个月。</li>
+  <li><b>四格对照</b>（同一份数据 / 同一个模型 / 同一个测试集，只改「数据用对没有」）：A 诚实（PIT + 逐年游走）· B 偷看未来一期（多接一张半年报）· C 随机切分（训练集含未来年份）· D 负对照（训练标签打乱）；基线 = 会计持续性。</li>
+  <li><b>披露链五格</b>：一季报 → 半年报 → 三季报 → <b>业绩预告</b> → 年报，每格只用那一刻真的能看见的东西；另做<b>信号时间线</b>（同一批公司「有没有进前 10%」的轨迹）。</li>
+</ul>
+
+<h2>最硬的读数</h2>
+<table>
+  <tr><th>臂</th><th>改了什么</th><th class="num">AUC</th><th class="num">top-10% 里真亏的比例</th></tr>
+  <tr><td>A 诚实</td><td>——</td><td class="num"><b>0.9103</b></td><td class="num"><b>84.95%</b>（基准 23.9% ⇒ lift 3.55）</td></tr>
+  <tr><td>B 偷看未来一期</td><td>特征 +半年报（<b>121 天后才披露</b>）</td><td class="num">0.9442</td><td class="num">92.40%</td></tr>
+  <tr><td>C 随机切分</td><td>训练集含未来年份</td><td class="num">0.9246</td><td class="num">87.63%</td></tr>
+  <tr><td>D 负对照</td><td>训练标签打乱（5 个种子）</td><td class="num">0.4993 ± 0.0637</td><td class="num">25.2%</td></tr>
+  <tr><td>基线：上年是否亏损</td><td>不训练</td><td class="num">0.7512</td><td class="num">70.4%</td></tr>
+</table>
+<ul>
+  <li><b>「偷看一期」的那 3.4 分 ≈ 老老实实等到 8 月的合法分</b>（0.9442 vs <b>0.9427</b>）⇒ <span class="hl">偷的不是更强的模型，是提前量</span>：该问的是「为提前多久，愿意放弃多少分」。A 臂逐年 0.891 / 0.896 / 0.922 / 0.928，三种子极差 0.001 ⇒ 这个差远在噪声外。</li>
+  <li><b>信号什么时候亮</b>：会亏的公司进前 10% 的比例 <b>4 月 35.6% → 8 月 38.5% → 10 月 40.1%</b>（误报 2.0% → 0.6%）；<b>43.8% 的亏损公司从未亮灯</b> ⇒ <span class="hl">预警的天花板不是模型，是基本面在哪一天开始变难看</span>。</li>
+  <li><b>数据源本身的坑</b>：东财批量表的「公告日期」<b>不是首次披露日</b>，而是「最近一次披露该期数字的公告日」——带「上年同期」栏的报表<b>全期次晚 365 天</b>；证据：茅台 2016Q1 实际 <code>2016-04-21</code>、东财利润表写 <code>2017-04-25</code>。</li>
+</ul>
+
+<div class="figs">
+  <figure><img src="figs/fig_leadtime.png" alt="提前量 → 判别力">
+    <figcaption><b>提前量 → 判别力</b>：红线是「偷看一期」那 3.4 分，正好切在半年报那个点上。</figcaption></figure>
+  <figure><img src="figs/fig_signal_timeline.png" alt="信号什么时候亮">
+    <figcaption><b>信号什么时候亮</b>：红线 = 真会亏的公司，蓝线 = 误报。</figcaption></figure>
+</div>
+
+<h2>一条最值钱的方法论</h2>
+<ul>
+  <li><b>任何「差多少分」先确认两次读数在同一批样本上</b>：C 臂 0.9246 对比 A 的 0.9103 看着是 +1.4 分，但两批测试样本不同；把 A 限制到同一批重算是 <b>0.9122</b> ⇒ 真差 <b>+1.24 分</b>。</li>
+  <li><b>负对照要给分布、不给点</b>：单种子 0.5488 看着「偏高」，5 个种子给出 <b>0.4993 ± 0.0637</b>（0.403–0.583）才落回 0.5。<b>跨阶段只比阶段内分位、分母要一致、并列会把「前 10%」判没</b>（三条都写进了 <code>docs/口径.md</code>）。</li>
+</ul>
+
+<h2>诚实边界</h2>
+<ul>
+  <li>标签是 <b>「年报亏损」不是「被 ST」</b>（可靠 ST 名单拿不到）；<b>退市样本缺失</b> ⇒ 正例率偏低；<b>只有日期做了双源对账，面板数值没有</b>。预告那格是<b>子集</b>（正例率 43.8%），不与 4/8/10 月三格直接比；业绩快报那格<b>做不了</b>（PIT 锚点被污染）——<b>「做不了」和「没做」分开写</b>。</li>
+  <li>不许把 <b>96.2% 的精确率</b>读成召回：前 10% 名单里 96.2% 真会亏，但它只覆盖 <b>40%</b> 的亏损公司。</li>
+</ul>
+
+<div class="foot">
+  <b>入口</b>：本地仓库 <code>C:\dev\finlab-ml</code>（提交 <code>93813d2</code> · 八条命令端到端复跑 · 生成物不入库）·
+  <b>口径</b> <code>docs/口径.md</code> · <b>结论与红线</b> <code>docs/结论.md</code> ·
+  <b>图</b> <code>docs/figs/</code>（五张）· <b>取数账</b> <code>data/fetch_*.csv</code>
+</div>
+
+</body>
+</html>

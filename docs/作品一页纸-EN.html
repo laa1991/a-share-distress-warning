@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Financial Distress Warning — What "Getting the Data Right" Is Worth (One-Pager)</title>
+<style>
+  @page { size: A4; margin: 11mm 12mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", sans-serif; color: #1a1a1a;
+         font-size: 9.05pt; line-height: 1.28; margin: 0; }
+  h1 { font-size: 14.5pt; margin: 0 0 2px; letter-spacing: .2px; }
+  .sub { color: #555; font-size: 8.3pt; margin-bottom: 6px; }
+  h2 { font-size: 10pt; margin: 7px 0 2px; padding-bottom: 1.2px; border-bottom: 1.4px solid #1a1a1a; }
+  ul { margin: 1px 0 0; padding-left: 13px; }
+  li { margin: 1px 0; }
+  b, strong { color: #000; }
+  .foot { margin-top: 6px; padding-top: 3px; border-top: 1px solid #bbb; color: #444; font-size: 8.2pt; }
+  code { background: #f2f2f2; padding: 0 2px; border-radius: 2px; font-size: 8.3pt; }
+  .hl { background: #ffe9a8; padding: 0 2px; }
+  .figs { display: flex; gap: 10px; margin: 4px auto 0; max-width: 172mm; }
+  .figs figure { flex: 1; margin: 0; }
+  .figs img { width: 100%; border: 1px solid #ddd; }
+  .figs figcaption { color: #444; font-size: 7.8pt; line-height: 1.2; margin-top: 2px; }
+  table { border-collapse: collapse; width: 100%; font-size: 8.4pt; margin-top: 2px; }
+  th, td { border-bottom: 1px solid #ddd; padding: 0 4px; text-align: left; }
+  th { background: #f4f4f4; font-weight: 600; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<h1>Financial Distress Warning — What "Getting the Data Right" Is Worth</h1>
+<div class="sub">An end-to-end reproducible LightGBM deployment: <b>public filings → a risk list</b>, with <b>who could see what, and when</b> turned into a measurable score gap · 2026-09 ·
+local repo <code>C:\dev\finlab-ml</code> (6 commits · 8 commands to rerun · public repo pending)</div>
+
+<h2>Problem</h2>
+<ul>
+  <li>"Great offline, useless in production" is rarely a modelling problem — it is <b>misused data</b>: statements that were not published yet, training samples from the future, the <i>latest</i> filing date mistaken for the <i>first</i> one.</li>
+  <li>Such mistakes <b>raise no alarm</b>: the pipeline runs and the score looks better ⇒ every cell needs a criterion that <b>needs no human referee</b>.</li>
+</ul>
+
+<h2>What was built</h2>
+<ul>
+  <li><b>Panel</b>: China A-shares 2016Q1–2026Q2 · <b>42 periods · 195,707 rows · 5,252 stocks</b> (four EastMoney bulk tables + the <b>CNINFO disclosure calendar</b> as the point-in-time anchor). <b>Task</b>: sample = (ticker, year) on the <b>Q1 report</b>; label = <b>a loss in that year's annual report</b>; decision time = the Q1 report's <b>actual filing date</b> (median Apr 23) ⇒ a genuine 8–12 month horizon.</li>
+  <li><b>Four-arm control</b> (same data / model / test set; only "was the data used correctly" changes): A honest (point-in-time + walk-forward) · B peek at the next report (adds H1 figures) · C random split (training set contains future years) · D negative control (shuffled training labels); baseline = accounting persistence. Plus <b>five disclosure-chain steps</b> (Q1 → H1 → Q3 → <b>pre-announcement</b> → annual report) and a <b>signal timeline</b> of the same firms' trajectory.</li>
+</ul>
+
+<h2>Hardest numbers</h2>
+<table>
+  <tr><th>Arm</th><th>What changed</th><th class="num">AUC</th><th class="num">Share of the top decile that did lose</th></tr>
+  <tr><td>A honest</td><td>—</td><td class="num"><b>0.9103</b></td><td class="num"><b>84.95%</b> (base rate 23.9% ⇒ lift 3.55)</td></tr>
+  <tr><td>B peek next report</td><td>features + H1 (<b>filed 121 days later</b>)</td><td class="num">0.9442</td><td class="num">92.40%</td></tr>
+  <tr><td>C random split</td><td>training set contains future years</td><td class="num">0.9246</td><td class="num">87.63%</td></tr>
+  <tr><td>D negative control</td><td>shuffled training labels (5 seeds)</td><td class="num">0.4993 ± 0.0637</td><td class="num">25.2%</td></tr>
+  <tr><td>Baseline: loss last year</td><td>no training</td><td class="num">0.7512</td><td class="num">70.4%</td></tr>
+</table>
+<ul>
+  <li><b>The 3.4 points from "peeking" ≈ the legitimate score of simply waiting until August</b> (0.9442 vs <b>0.9427</b>) ⇒ <span class="hl">what is stolen is not a stronger model, it is lead time</span>: how much score would you give up to know this much earlier? (Arm A is stable: 0.891/0.896/0.922/0.928 by year; seed range 0.001.)</li>
+  <li><b>When does the signal light up</b>: share of eventual losers already in the top decile — <b>Apr 35.6% → Aug 38.5% → Oct 40.1%</b> (false alarms 2.0% → 0.6%); <b>43.8% of losers never light up</b> ⇒ <span class="hl">the ceiling is not the model, it is the day the fundamentals start looking bad</span>.</li>
+  <li><b>A trap inside the source</b>: EastMoney's "announcement date" is not the first filing date but the <i>latest</i> filing carrying those figures — for statements with prior-year comparatives it is <b>365 days late</b>; evidence: Moutai 2016Q1 filed <code>2016-04-21</code>, EastMoney's income statement says <code>2017-04-25</code>.</li>
+</ul>
+
+<div class="figs">
+  <figure><img src="figs/fig_leadtime.png" alt="Lead time vs discrimination">
+    <figcaption><b>Lead time → discrimination</b>: the red line is the 3.4 "peeked" points, cutting exactly at the H1 point.</figcaption></figure>
+  <figure><img src="figs/fig_signal_timeline.png" alt="When the signal lights up">
+    <figcaption><b>When the signal lights up</b>: red = firms that did lose, blue = false alarms.</figcaption></figure>
+</div>
+
+<h2>The one methodology worth keeping</h2>
+<ul>
+  <li><b>Never subtract two scores from different samples</b>: arm C's 0.9246 vs arm A's 0.9103 looks like +1.4 points, but the test sets differ; restricting A to C's samples gives <b>0.9122</b> ⇒ the real gap is <b>+1.24</b>.</li>
+  <li><b>A negative control needs a distribution, not a point</b>: one shuffled seed reads 0.5488 ("suspiciously high"), five seeds give <b>0.4993 ± 0.0637</b> (0.403–0.583) and only then does it land on 0.5. <b>Across stages, compare within-stage percentiles, keep the denominator identical, beware of ties</b> (<code>docs/口径.md</code>).</li>
+</ul>
+
+<h2>Honest boundaries</h2>
+<ul>
+  <li>Label is <b>"annual loss", not an "ST flag"</b>; <b>delisted firms are missing</b> (base rate understated); <b>only dates were reconciled against a second source, the panel values were not</b>. The pre-announcement step is a <b>subset</b> (43.8% base rate); the flash-report step is <b>not doable</b> — <b>"cannot be done" and "not done" are reported separately</b>. And do not read the <b>96.2% precision</b> as recall: that list covers only <b>40%</b> of all losers.</li>
+</ul>
+
+<div class="foot">
+  <b>Entry points</b>: local repo <code>C:\dev\finlab-ml</code> (commit <code>93813d2</code> · 8 commands, end-to-end reproducible · generated artefacts not committed) ·
+  <b>calibration</b> <code>docs/口径.md</code> · <b>findings &amp; red lines</b> <code>docs/结论.md</code> ·
+  <b>figures</b> <code>docs/figs/</code> (five) · <b>fetch ledger</b> <code>data/fetch_*.csv</code>
+</div>
+
+</body>
+</html>
