@@ -97,7 +97,35 @@ def load_st_cases(n: int) -> pd.DataFrame:
 
 
 def build_cases(task: str, n: int) -> pd.DataFrame:
-    return load_rev_cases(n) if task == "rev_dir" else load_st_cases(n)
+    cases = load_rev_cases(n) if task == "rev_dir" else load_st_cases(n)
+    return attach_gold(task, cases)
+
+
+def attach_gold(task: str, cases: pd.DataFrame) -> pd.DataFrame:
+    """把**裁决过的真值**（人工/独立读者）贴到题上 —— 这是 arena 该用的裁判，不是我的规则标签。
+
+    规则标签只留作对照（它自己就有 25% 量级的噪声，见 `docs/为什么戴帽（原因分布）.md`）。
+    真值文件按 id 键（多轮分别产出的都收）：`<task>_gold_labels*.csv` 里带 `裁定` 列的那些。
+    """
+    gold: dict[str, str] = {}
+    for f in sorted(OUT.glob(f"{task}_gold_labels*.csv")):
+        try:
+            d = pd.read_csv(f, dtype=str).fillna("")
+        except Exception:  # noqa: BLE001
+            continue
+        col = next((c for c in ("裁定", "人工裁定") if c in d.columns), None)
+        if not col:
+            continue
+        for _, r in d.iterrows():
+            v = str(r[col]).strip()
+            if v and v != "?" and r.get("id"):
+                gold[str(r["id"])] = v
+    cases = cases.copy()
+    cases["truth_gold"] = cases["id"].map(gold)
+    hit = int(cases["truth_gold"].notna().sum())
+    print(f"    [gold] {task}：{len(cases)} 道题里 **{hit}** 道有裁决真值"
+          + ("" if hit == len(cases) else "（其余只跑规则基线）"))
+    return cases
 
 
 def rule_baseline(task: str, cases: pd.DataFrame) -> dict:
@@ -105,9 +133,23 @@ def rule_baseline(task: str, cases: pd.DataFrame) -> dict:
     所以这张台真正要量的是**判断器相对规则多抓到了什么**，以及它自己的校准。"""
     m = PROMPTS[task]["truth_map"]
     cov = cases["truth_rule"].isin(m).mean()
-    return {"cases": int(len(cases)), "rule_label_coverage": round(float(cov), 4),
-            "rule_agreement": 1.0 if cov == 1 else None,
-            "note": "规则基线的参差在**覆盖率**上（48.4% / 67.5%），不在一致率上；见文档 §2.5 与 §8"}
+    out = {"cases": int(len(cases)), "rule_label_coverage": round(float(cov), 4),
+           "rule_agreement": 1.0 if cov == 1 else None,
+           "note": "规则基线的参差在**覆盖率**上（48.4% / 67.5%），不在一致率上；见文档 §2.5 与 §8"}
+    if "truth_gold" in cases.columns:
+        g = cases[cases["truth_gold"].notna()].copy()
+        # ⚠️ 两边都要过同一张映射表再比：rev_dir 的 map 把「坏→更坏」映成 0/2/4（数字刻度），
+        #    而金标表里存的是三分类**字符串** ⇒ 只映一侧会得出 0% 一致的假读数（我撞过一次）。
+        norm = lambda v: m.get(v, v)  # noqa: E731
+        g["_rule"] = g["truth_rule"].map(norm)
+        g["_gold"] = g["truth_gold"].map(norm)
+        ok = g[g["_rule"].notna()]
+        if len(ok):
+            a = (ok["_gold"] == ok["_rule"])
+            out["rule_vs_gold_n"] = int(len(ok))
+            out["rule_vs_gold_agreement"] = round(float(a.mean()), 4)
+            out["rule_vs_gold_disagree"] = ok[~a][["id", "_rule", "_gold"]].values.tolist()
+    return out
 
 
 def jev_payload(task: str, one: pd.Series) -> dict:
