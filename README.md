@@ -7,6 +7,8 @@
 - 数据：A 股 2016Q1–2026Q2，**42 个报告期 · 195,707 行 · 5,252 只股票**（东财批量接口 + 巨潮披露时间表）
 - 结果：诚实 AUC **0.910**（逐年 0.89/0.90/0.92/0.93）· top-10% 里 **85%** 当年转亏（lift 3.55）
 - 对照：**偷看一期 +3.4 分** · **随机切分 +1.2 分** · 负对照落在 0.5
+- 提前量曲线（同一个目标，只把决策时刻往后挪）：**4 月 0.910 → 8 月 0.943 → 10 月 0.963 → 次年 1 月（业绩预告）0.999**
+  ⇒ **"偷看一期"拿到的 3.4 分 ≈ "等到 8 月"拿到的分**：偷的是提前量，不是模型强弱
 
 📄 **结论与红线** → [`docs/结论.md`](docs/结论.md) ｜ 📐 **口径（含数据源的坑）** → [`docs/口径.md`](docs/口径.md) ｜ 📊 图 → `docs/figs/`
 
@@ -18,10 +20,15 @@
 cd C:\dev\finlab-ml
 python scripts/fetch_panel.py --start 2016-03-31 --end 2026-06-30 --workers 4   # ① 四张财报表（约 5 分钟，已落盘则跳过）
 python scripts/fetch_disclosure.py --start 2016 --end 2026                      # ② 巨潮实际披露日（约 1 分钟）
-python src/build_panel.py                                                       # ③ 拼面板 + 打印源对账/自检
-python src/run_experiments.py                                                   # ④ 四格对照 → data/results.json
-python src/make_figures.py                                                      # ⑤ 出图（可选）
+python scripts/fetch_yjyg.py --start 2015 --end 2026                            # ③ 业绩预告（约 3 分钟）
+python src/build_panel.py                                                       # ④ 拼面板 + 打印源对账/自检
+python src/run_experiments.py                                                   # ⑤ 四格对照 → data/results.json
+python src/run_leadtime_curve.py                                                # ⑥ 提前量曲线 → data/leadtime_curve.json
+python src/make_figures.py                                                      # ⑦ 出图（可选）
 ```
+
+⚠️ 别把同一个抓取脚本**同时**起两个进程（我在这条线上真的踩了：后台一个、前台又一个 ⇒ 两条进程抢同一个 `.csv.tmp`，
+报 `PermissionError: WinError 32`，4 次调用白跑 —— 重跑会自动补，但那是白等）。
 
 辅助诊断（都是"不解释先量"的产物）：
 

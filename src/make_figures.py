@@ -67,4 +67,26 @@ ax.set_xlabel("gain"); ax.set_title("A 臂最后一个折：特征重要性（to
 ax.grid(axis="x", alpha=0.25)
 fig.tight_layout(); fig.savefig(FIGS / "fig_importance.png", dpi=150); plt.close(fig)
 
+# ---- 图 4：提前量 → 判别力 ----
+lt = json.loads((DATA / "leadtime_curve.json").read_text(encoding="utf-8"))
+order = ["① 一季报披露", "② 半年报披露", "③ 三季报披露", "④ 业绩预告公布", "⑤ 年报披露（=答案）"]
+x = [lt[k]["lead_days_median"] for k in order]
+a = [lt[k]["pooled"]["auc"] for k in order]
+fig, ax = plt.subplots(figsize=(6.6, 4.2))
+ax.plot(x, a, "o-", color="#1f77b4", lw=2)
+for xi, yi, k in zip(x, a, order):
+    ax.annotate(f"{yi:.3f}\n{k.split(' ')[1]}", (xi, yi), textcoords="offset points",
+                xytext=(0, 8), ha="center", fontsize=9)
+b_arm = res["B_lookahead_next_report"]["pooled"]["auc"]
+b_lead = 361 - 121          # 偷看半年报 ≈ 把决策时刻提前 121 天，这里是示意
+ax.axhline(b_arm, color="#d62728", ls="--", lw=1.2,
+           label=f"B 偷看一期（4 月决策）AUC={b_arm:.3f}")
+ax.annotate("偷看一期 ≈ 等到 8 月\n（偷的是提前量，不是模型）", xy=(b_lead / 1.0, b_arm),
+            xytext=(0.35, 0.30), textcoords="axes fraction", fontsize=9, color="#d62728")
+ax.set_xlabel("距年报披露的天数（越小＝越晚决策、信息越多）")
+ax.set_ylabel("AUC")
+ax.set_title("提前量 → 判别力：同一个目标，只改决策时刻")
+ax.invert_xaxis(); ax.grid(alpha=0.25); ax.legend(loc="upper left", fontsize=9)
+fig.tight_layout(); fig.savefig(FIGS / "fig_leadtime.png", dpi=150); plt.close(fig)
+
 print("图已出：", *(p.name for p in sorted(FIGS.glob("*.png"))))
