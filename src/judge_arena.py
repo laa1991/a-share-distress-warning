@@ -19,6 +19,7 @@ import argparse
 import json
 import os
 import re
+import time
 import sys
 from pathlib import Path
 
@@ -163,44 +164,196 @@ def jev_payload(task: str, one: pd.Series) -> dict:
     }
 
 
-def call_judge(cases: pd.DataFrame, task: str, provider: str) -> pd.DataFrame:
+def _opencode_key() -> str:
+    """OpenCode 的 key：先环境变量，再凭据库（⚠️ YAML 会对长值折行，要吃掉续行）。"""
+    k = os.environ.get("OPENCODE_API_KEY", "")
+    if k:
+        return k
+    p = Path(os.path.expanduser("~")) / ".dsh" / ".credentials.yaml"
+    try:
+        text = p.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return ""
+    m = re.search(r"^OPENCODE_API_KEY:\s*(.+)$", text, re.M)
+    if not m:
+        return ""
+    v = m.group(1).strip().strip('"').strip("'")
+    if len(v) < 20:                                  # 折行兜底：下一行若有缩进就是续行
+        nxt = text[m.end():].splitlines()
+        if nxt and nxt[0].startswith((" ", "\t")):
+            v += nxt[0].strip().strip('"')
+    return v
+
+
+def _parse_json_answer(s: str) -> dict:
+    """从模型的自由文本里抠出第一个 JSON 对象（判断器不许我们改它的作文格式，只能宽收）。"""
+    if not s:
+        return {}
+    m = re.search(r"\{.*\}", s, re.S)
+    if not m:
+        return {}
+    try:
+        return json.loads(m.group(0))
+    except json.JSONDecodeError:
+        try:
+            return json.loads(m.group(0).replace("'", '"'))
+        except json.JSONDecodeError:
+            return {}
+
+
+OPENCODE_BASE = "https://opencode.ai/zen/go/v1/chat/completions"
+OPENCODE_ZEN = "https://opencode.ai/zen/v1/chat/completions"
+# ⚠️ 两个端点不是一回事，实测（2026-09-25 凌晨，同一把 key）：
+#   · `/zen/go/v1`（Go 订阅那侧）：**必须带 `x-opencode-session`**（缺了 400 MissingSessionID）；**不含 jev**
+#   · `/zen/v1`（按量付费那侧）：**jev-1.13 只在这儿**；且**部分上游不可用**时会回 503 `Endpoint is unavailable`
+#     （实测同一时刻：deepseek-v4-pro / glm-5.3 → 200，而 claude-sonnet-5 / gpt-5.5 / jev-1.13 → 503）
+#   ⇒ 路由规则按模型名走：`jev*` 走 Zen 按量付费，其余走 Go 订阅。
+
+
+def call_judge(cases: pd.DataFrame, task: str, provider: str, model: str = "") -> pd.DataFrame:
+    """只留一个 call hook：接哪个判断器改这里。**缺 key / 缺依赖一律大声停住，不静默降级。**"""
     if provider == "none":
-        print("\n[judge] 未指定判断器（--judge none）：只跑规则基线。要接 Jev 请设 OPENROUTER_API_KEY 后 --judge openrouter。")
+        print("\n[judge] 未指定判断器（--judge none）：只跑规则基线。")
         return pd.DataFrame()
-    key = os.environ.get("OPENROUTER_API_KEY", "")
-    if not key:
-        raise SystemExit("[judge] ❌ 缺 OPENROUTER_API_KEY —— 本台**不静默降级**：要么设 key，要么用 --judge none。"
-                         "\n        （key 也不在凭据库里：本机只有 DEEPSEEK / MINIMAX / OPENCODE / GITHUB。）")
+
+    import uuid
+
     import requests  # noqa: E402
+
+    if provider == "opencode":
+        key = _opencode_key()
+        if not key:
+            raise SystemExit("[judge] ❌ 缺 OPENCODE_API_KEY（环境变量与凭据库都没有）—— 本台**不静默降级**。")
+        model = model or "glm-5.3"
+        url = OPENCODE_ZEN if model.lower().startswith("jev") else OPENCODE_BASE
+        headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                   "x-opencode-session": str(uuid.uuid4()), "x-opencode-client": "dsh-judge-arena/1.0"}
+    elif provider == "openrouter":
+        key = os.environ.get("OPENROUTER_API_KEY", "")
+        if not key:
+            raise SystemExit("[judge] ❌ 缺 OPENROUTER_API_KEY —— 本台**不静默降级**：要么设 key，要么用 --judge none。")
+        url = "https://openrouter.ai/api/alpha/decisions"
+        headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+    else:
+        raise SystemExit(f"[judge] 未知 provider: {provider}")
+
+    ask = PROMPTS[task]["question"]
     rows = []
     for r in cases.itertuples(index=False):
-        payload = jev_payload(task, pd.Series({"text": r.text}))
-        t0 = pd.Timestamp.now()
+        if provider == "opencode":
+            payload = {"model": model, "temperature": 0, "max_tokens": 6000,
+                       "messages": [{"role": "user",
+                                     "content": f"{ask}\n\n---\n{r.text}\n---\n"
+                                                "只回一个 JSON：{\"choice\":\"…\",\"confidence\":0..1}"}]}
+        else:
+            payload = jev_payload(task, pd.Series({"text": r.text}))
+        t0 = time.perf_counter()
         try:
-            resp = requests.post("https://openrouter.ai/api/alpha/decisions",
-                                 headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
-                                 json=payload, timeout=60)
-            ms = (pd.Timestamp.now() - t0).total_seconds() * 1000
+            resp = requests.post(url, headers=headers, json=payload, timeout=180)
+            ms = (time.perf_counter() - t0) * 1000
             j = resp.json()
-            rows.append({"id": r.id, "truth_rule": r.truth_rule, "pred": json.dumps(j.get("answers", j), ensure_ascii=False),
-                         "ms": round(ms, 1), "cost_usd": (j.get("usage") or {}).get("cost"), "err": ""})
+            if provider == "opencode":
+                msg = (j.get("choices") or [{}])[0].get("message", {}) or {}
+                content = msg.get("content") or ""
+                ans = _parse_json_answer(content)
+                # ⚠️ 这些模型会先写 `reasoning_content`：若正文为空或没抠出 JSON，去思考通道里再抠一次
+                #    （实测 max_tokens=900 时 1/3 的样本 JSON 全落在思考通道里被截断）
+                if not ans:
+                    think = msg.get("reasoning_content") or msg.get("reasoning") or ""
+                    ans = _parse_json_answer(think)
+                    if ans:
+                        content = f"[从 reasoning 抠出] {think[-200:]}"
+                usage = j.get("usage") or {}
+                rows.append({"id": r.id, "truth_rule": r.truth_rule, "http": resp.status_code,
+                             "choice": ans.get("choice"), "conf": ans.get("confidence"),
+                             "raw": content[:200], "ms": round(ms, 1),
+                             "ptok": usage.get("prompt_tokens"), "ctok": usage.get("completion_tokens"),
+                             "cost_usd": usage.get("cost"), "err": "" if resp.status_code == 200 else resp.text[:120]})
+            else:
+                rows.append({"id": r.id, "truth_rule": r.truth_rule, "http": resp.status_code,
+                             "choice": json.dumps(j.get("answers", j), ensure_ascii=False), "conf": None,
+                             "raw": "", "ms": round(ms, 1), "ptok": (j.get("usage") or {}).get("prompt_tokens"),
+                             "ctok": (j.get("usage") or {}).get("completion_tokens"),
+                             "cost_usd": (j.get("usage") or {}).get("cost"), "err": ""})
         except Exception as e:  # noqa: BLE001
-            rows.append({"id": r.id, "truth_rule": r.truth_rule, "pred": None, "ms": None, "cost_usd": None,
+            rows.append({"id": r.id, "truth_rule": r.truth_rule, "http": None, "choice": None, "conf": None,
+                         "raw": "", "ms": None, "ptok": None, "ctok": None, "cost_usd": None,
                          "err": f"{type(e).__name__}: {str(e)[:80]}"})
     return pd.DataFrame(rows)
+
+
+def _primary(choice) -> tuple[str, str]:
+    """把「A+另:B」这种**主值 + 多值标注**拆开：主值 = 首个字母；剩下的是标注。
+
+    ⚠️ 不许用 `.str[:1]` 图省事：它会把**回显/说明文字**的首字符当成答案，
+      实测（2026-09-25）它把 3 条「A+另:B」当成「答对了 A」、还让读数看着更漂亮 —— **尺子造的，不是模型答的**。
+    """
+    s = str(choice or "").strip().upper()
+    m = re.match(r"^\s*([ABCDE])", s)
+    if not m:
+        return "", s
+    return m.group(1), s[len(m.group(1)):]
+
+
+def score_judge(res: pd.DataFrame, task: str, cases: pd.DataFrame) -> dict:
+    """四轴里能算的三轴 + 与裁决真值的一致率（裁判 = v6-120）。"""
+    out: dict = {"n": int(len(res)), "ok": int(res["err"].eq("").sum())}
+    if "ms" in res and res["ms"].notna().any():
+        out["ms_p50"] = round(float(res["ms"].median()), 1)
+        out["ms_p95"] = round(float(res["ms"].quantile(0.95)), 1)
+    for c in ("ptok", "ctok"):
+        if c in res and res[c].notna().any():
+            out[c + "_sum"] = int(res[c].fillna(0).sum())
+    if res.get("cost_usd") is not None and res["cost_usd"].notna().any():
+        out["cost_usd_sum"] = float(pd.to_numeric(res["cost_usd"], errors="coerce").fillna(0).sum())
+
+    gold = dict(zip(cases["id"], cases.get("truth_gold", pd.Series(dtype=str))))
+    s = res.copy()
+    s["gold"] = s["id"].map(gold)
+    s[["_primary", "_extra"]] = s["choice"].apply(lambda v: pd.Series(_primary(v)))
+    s["_multi"] = s["_extra"].str.contains("另|\\+", regex=True).fillna(False)
+
+    allg = s[s["gold"].notna()]
+    dec = allg[allg["_primary"].isin(list("ABCDE"))]
+    out["answered"] = int(len(dec))
+    out["answered_share"] = round(float(len(dec) / max(len(allg), 1)), 4)
+    out["multi_value_share"] = round(float(dec["_multi"].mean()), 4) if len(dec) else None
+    if len(dec):
+        ok = (dec["_primary"] == dec["gold"])
+        out["gold_n"] = int(len(dec))
+        out["accuracy_on_answered"] = round(float(ok.mean()), 4)
+        out["accuracy_all_counting_blank_as_wrong"] = round(float(ok.sum() / max(len(allg), 1)), 4)
+    # 校准：confidence 是"我选的那个的概率" ⇒ 不确定带 [0.2,0.8]（与 GBDT 那格同口径）
+    conf = pd.to_numeric(dec["conf"] if len(dec) else s["conf"], errors="coerce")
+    if conf.notna().any():
+        c = conf.dropna()
+        out["conf_median"] = round(float(c.median()), 3)
+        out["uncertain_band_share"] = round(float(((c >= 0.2) & (c <= 0.8)).mean()), 4)
+        if len(dec):
+            cc = pd.to_numeric(dec["conf"], errors="coerce")
+            m = cc.notna()
+            if m.any():
+                out["brier_conf_vs_correct"] = round(
+                    float(((cc[m] - (dec["_primary"][m] == dec["gold"][m]).astype(float)) ** 2).mean()), 4)
+    return out
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--gold", type=int, default=0)
-    ap.add_argument("--judge", default="none", choices=["none", "openrouter"])
+    ap.add_argument("--judge", default="none", choices=["none", "openrouter", "opencode"])
+    ap.add_argument("--model", default="", help="opencode 通道用哪个模型（如 glm-5.3 / kimi-k3 / grok-4.7）")
+    ap.add_argument("--task", default="", help="只跑一个任务（st_reason / rev_dir）；空 = 两个都跑")
+    ap.add_argument("--limit", type=int, default=0, help="判断器只跑前 N 道（0 = 全跑）")
+    ap.add_argument("--ids-file", default="", help="只跑这个文件里列出的 id（补跑弃答/失败用）")
     ap.add_argument("--n", type=int, default=120)
     args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
 
+    tasks = [args.task] if args.task else ["rev_dir", "st_reason"]
     summary = {}
-    for task in ("rev_dir", "st_reason"):
+    for task in tasks:
         cases = build_cases(task, args.n)
         base = rule_baseline(task, cases)
         print(f"\n=== {task}（{PROMPTS[task]['primitive']}）· 题 {len(cases)} 道")
@@ -219,14 +372,23 @@ def main() -> int:
                 OUT / f"{task}_gold_template.csv", index=False, encoding="utf-8-sig")
             print(f"    金标模板 -> {OUT / f'{task}_gold_template.csv'}（{len(g)} 行，填「人工裁定」列）")
 
-    if args.judge != "none":
-        for task in ("rev_dir", "st_reason"):
-            cases = pd.read_csv(OUT / f"{task}_cases.csv").head(20)
-            res = call_judge(cases, task, args.judge)
-            if len(res):
-                agree = (res["pred"].notna()).mean()
-                print(f"  {task}: 成功 {agree:.0%} · 中位延迟 {res['ms'].median():.0f} ms · "
-                      f"合计成本 ${pd.to_numeric(res['cost_usd'], errors='coerce').sum():.6f}")
+        if args.judge != "none":
+            run = cases
+            if args.ids_file:
+                want = [x.strip() for x in Path(args.ids_file).read_text(encoding="utf-8").split() if x.strip()]
+                run = cases[cases["id"].isin(want)].copy()
+                print(f"[judge] 只跑 ids-file 里的 {len(run)}/{len(want)} 道（{args.ids_file}）")
+            elif args.limit:
+                run = cases.head(args.limit)
+            print(f"\n[judge] {args.judge}{' · ' + args.model if args.model else ''} · 跑 {len(run)} 道…", flush=True)
+            res = call_judge(run, task, args.judge, args.model)
+            tag = f"{args.judge}-{args.model or 'default'}".replace("/", "_")
+            out_csv = OUT / f"{task}_judge_{tag}{'-refill' if args.ids_file else ''}.csv"
+            res.to_csv(out_csv, index=False, encoding="utf-8-sig")
+            sc = score_judge(res, task, cases)
+            print(f"[judge] {task} 读数：{sc}")
+            print(f"[judge] 明细 → {out_csv}")
+            summary[task]["judge"] = {tag: sc}
 
     (OUT / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\n考卷与汇总 -> {OUT}/")

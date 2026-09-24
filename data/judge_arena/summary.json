@@ -1,28 +1,4 @@
 {
-  "rev_dir": {
-    "cases": 120,
-    "baseline": {
-      "cases": 120,
-      "rule_label_coverage": 1.0,
-      "rule_agreement": 1.0,
-      "note": "规则基线的参差在**覆盖率**上（48.4% / 67.5%），不在一致率上；见文档 §2.5 与 §8",
-      "rule_vs_gold_n": 18,
-      "rule_vs_gold_agreement": 0.8889,
-      "rule_vs_gold_disagree": [
-        [
-          "000587_2022-04-19",
-          4,
-          2
-        ],
-        [
-          "000851_2025-04-19",
-          4,
-          0
-        ]
-      ]
-    },
-    "llm_baseline_recorded": "data/llm_baseline.json"
-  },
   "st_reason": {
     "cases": 120,
     "baseline": {
@@ -205,6 +181,21 @@
         ]
       ]
     },
-    "llm_baseline_recorded": null
+    "llm_baseline_recorded": null,
+    "judge": {
+      "opencode-glm-5.3": {
+        "n": 23,
+        "ok": 19,
+        "ms_p50": 48361.7,
+        "ms_p95": 85337.2,
+        "ptok_sum": 30471,
+        "ctok_sum": 66440,
+        "gold_n": 12,
+        "accuracy": 0.8333,
+        "conf_median": 0.95,
+        "uncertain_band_share": 0.0,
+        "brier_conf_vs_correct": 0.1377
+      }
+    }
   }
 }
