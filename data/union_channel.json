@@ -1,0 +1,126 @@
+{
+  "per_year": {
+    "2022": {
+      "n": 4518,
+      "n_pos": 920,
+      "model": {
+        "size": 452,
+        "share": 0.1,
+        "precision": 0.7898,
+        "coverage": 0.388
+      },
+      "sue": {
+        "size": 537,
+        "share": 0.1189,
+        "precision": 0.3948,
+        "coverage": 0.2304
+      },
+      "union": {
+        "size": 862,
+        "share": 0.1908,
+        "precision": 0.5371,
+        "coverage": 0.5033
+      },
+      "only_sue": {
+        "size": 410,
+        "precision": 0.2585,
+        "adds_true": 106,
+        "adds_false": 304
+      }
+    },
+    "2023": {
+      "n": 4828,
+      "n_pos": 1034,
+      "model": {
+        "size": 483,
+        "share": 0.1,
+        "precision": 0.8012,
+        "coverage": 0.3743
+      },
+      "sue": {
+        "size": 499,
+        "share": 0.1034,
+        "precision": 0.3968,
+        "coverage": 0.1915
+      },
+      "union": {
+        "size": 845,
+        "share": 0.175,
+        "precision": 0.5633,
+        "coverage": 0.4603
+      },
+      "only_sue": {
+        "size": 362,
+        "precision": 0.2459,
+        "adds_true": 89,
+        "adds_false": 273
+      }
+    },
+    "2024": {
+      "n": 5022,
+      "n_pos": 1305,
+      "model": {
+        "size": 502,
+        "share": 0.1,
+        "precision": 0.8944,
+        "coverage": 0.3441
+      },
+      "sue": {
+        "size": 514,
+        "share": 0.1023,
+        "precision": 0.4961,
+        "coverage": 0.1954
+      },
+      "union": {
+        "size": 894,
+        "share": 0.178,
+        "precision": 0.6644,
+        "coverage": 0.4552
+      },
+      "only_sue": {
+        "size": 392,
+        "precision": 0.3699,
+        "adds_true": 145,
+        "adds_false": 247
+      }
+    },
+    "2025": {
+      "n": 5105,
+      "n_pos": 1397,
+      "model": {
+        "size": 510,
+        "share": 0.0999,
+        "precision": 0.9059,
+        "coverage": 0.3307
+      },
+      "sue": {
+        "size": 534,
+        "share": 0.1046,
+        "precision": 0.5412,
+        "coverage": 0.2069
+      },
+      "union": {
+        "size": 903,
+        "share": 0.1769,
+        "precision": 0.6877,
+        "coverage": 0.4445
+      },
+      "only_sue": {
+        "size": 393,
+        "precision": 0.4046,
+        "adds_true": 159,
+        "adds_false": 234
+      }
+    }
+  },
+  "mean": {
+    "模型coverage": 0.3593,
+    "诉讼coverage": 0.206,
+    "并集coverage": 0.4658,
+    "模型precision": 0.8478,
+    "诉讼precision": 0.4572,
+    "并集precision": 0.6131,
+    "多抓真亏": 124.75,
+    "多带误报": 264.5
+  }
+}
