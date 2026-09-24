@@ -23,6 +23,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 TXT = ROOT / "data" / "raw" / "yjyg_rev_pdf"
 LINE_KEY = re.compile(r"归属|净利润")
+BAD_KEY = re.compile(r"净资产|所有者权益|股东权益|营业收入|总资产|负债|每股|现金流")  # 邻近科目：退一步搜索时要排除
 RANGE = re.compile(r"([\-－]?\d[\d,]*(?:\.\d+)?)\s*万元?\s*[—–~～至\-]\s*([\-－]?\d[\d,]*(?:\.\d+)?)\s*万元?")
 NEG_HINT = re.compile(r"亏损|负值|下滑")
 TICK = {"亏损": "亏损", "扭亏为盈": "扭亏为盈", "同向上升": "同向上升",
@@ -68,8 +69,13 @@ def main() -> int:
             if "修正后的预计业绩" in l or "修正后预计业绩" in l or re.match(r"^3[\.、]", l):
                 cut = i
                 break
-        prev_lines = lines[:cut] if cut else lines
-        after_lines = lines[cut:] if cut else lines
+        if cut is None:
+            # ⚠️ 2026-09-25 修：找不到"修正后"的分界时，两段会退化成**同一段**，
+            #    于是 v1 恒等于 v0 ⇒ 必然读出「不变」。实测这是「不变」桶的主要来源（金标 30 条里 10 条）。
+            #    现在改成**判不了**（None），让"抽不到"长得像"抽不到"，而不是像"不变"。
+            prev_lines, after_lines = [], []
+        else:
+            prev_lines, after_lines = lines[:cut], lines[cut:]
 
         def grab(seg_lines: list[str]) -> tuple[float | None, str]:
             for l in seg_lines:                      # 优先含"归属/净利润"且带区间的行
@@ -77,7 +83,9 @@ def main() -> int:
                     val, seg = pick_range(l)
                     if val is not None:
                         return val, seg
-            for l in seg_lines:                      # 退一步：任意带区间的行
+            for l in seg_lines:                      # 退一步：任意带区间的行（**排除**净资产/营收这类邻近科目）
+                if BAD_KEY.search(l):
+                    continue
                 val, seg = pick_range(l)
                 if val is not None:
                     return val, seg
@@ -85,6 +93,14 @@ def main() -> int:
 
         v0, s0 = grab(prev_lines)
         v1, s1 = grab(after_lines)
+        if s0 and s1 and s0 == s1:
+            # ⚠️ 同一段区间被读了两遍 ⇒ 是"没取到修正后"，不是"没变"（2026-09-25 金标抓出来的）
+            v0, v1 = None, None
+        if v0 is not None and v1 is not None and abs(v0 - v1) < 1e-9:
+            # ⚠️ 抽出来的中点数一模一样：在一份**修正公告**里，"数值完全没变"几乎总是**同一句被读了两遍**
+            #    （换行/破折号差异会让上面那条字符串比较漏过）。真正的"不变"另有 35 条，
+            #    它们靠勾选框与原因说明能认出来 ⇒ 这里宁可不判，也不报一个假的"不变"。
+            v0, v1 = None, None
         tk = ticked(t)
         rows.append({"code": code, "date": date, "prev": v0, "after": v1,
                      "段_前": s0[:48], "段_后": s1[:48], "勾选": tk,
