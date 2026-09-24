@@ -13,7 +13,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 A = ROOT / "data" / "judge_arena"
-MAP = {"合规/治理类": "A", "财务类": "B", "重整/破产": "C", "未归类": "D"}
+MAP = {"合规/治理类": "A", "财务类": "B", "重整/破产": "C", "未归类": "D", "生产经营类": "E"}
+DECIDABLE = list("ABCDE")          # ⚠️ E = 生产经营类（第三条法定触发，2026-09-25 补的一档）
 
 
 def score(name: str, path: Path) -> dict:
@@ -23,7 +24,7 @@ def score(name: str, path: Path) -> dict:
         src = pd.read_csv(A / "st_reason_gold_labels.csv", dtype=str).fillna("")
         d = d.merge(src[["id", "truth_rule"]], on="id", how="left")
     d["_r"] = d["truth_rule"].map(MAP)
-    ok = d[d[col].isin(list("ABCD"))]
+    ok = d[d[col].isin(DECIDABLE)]
     agree = ok[ok["_r"].notna()]
     a = (agree[col] == agree["_r"])
     return {"表": name, "n": len(d), "可判": len(ok), "判不了": len(d) - len(ok),
@@ -41,7 +42,7 @@ def main() -> int:
     v1 = pd.read_csv(A / "st_reason_gold_labels.v1-reviewed.csv", dtype=str).fillna("")
     v2 = pd.read_csv(A / "st_reason_gold_labels.v2.csv", dtype=str).fillna("")
     m = v1[["id", "裁定"]].merge(v2[["id", "裁定"]], on="id", suffixes=("_v1", "_v2"))
-    both = m[m["裁定_v1"].isin(list("ABCD")) & m["裁定_v2"].isin(list("ABCD"))]
+    both = m[m["裁定_v1"].isin(DECIDABLE) & m["裁定_v2"].isin(DECIDABLE)]
     print(f"\nv1↔v2：都判得了的 {len(both)} 条里一致 **{(both['裁定_v1'] == both['裁定_v2']).mean():.1%}**；"
           f"变化的 {int((m['裁定_v1'] != m['裁定_v2']).sum())} 条"
           f"（其中 13 条是 D/? → A/B 的修好、1 条回归、2 条多值主值变化）")
