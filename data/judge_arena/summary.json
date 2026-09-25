@@ -184,21 +184,21 @@
     "llm_baseline_recorded": null,
     "judge": {
       "opencode-glm-5.3": {
-        "n": 41,
-        "ok": 41,
-        "ms_p50": 5546.8,
-        "ms_p95": 28736.4,
-        "ptok_sum": 62654,
-        "ctok_sum": 27209,
-        "answered": 40,
-        "answered_share": 0.9756,
-        "multi_value_share": 0.1,
-        "gold_n": 40,
-        "accuracy_on_answered": 0.975,
-        "accuracy_all_counting_blank_as_wrong": 0.9512,
+        "n": 120,
+        "ok": 98,
+        "ms_p50": 5046.8,
+        "ms_p95": 20393.9,
+        "ptok_sum": 151256,
+        "ctok_sum": 55865,
+        "answered": 97,
+        "answered_share": 0.8083,
+        "multi_value_share": 0.0928,
+        "gold_n": 97,
+        "accuracy_on_answered": 0.9794,
+        "accuracy_all_counting_blank_as_wrong": 0.7917,
         "conf_median": 0.98,
         "uncertain_band_share": 0.0,
-        "brier_conf_vs_correct": 0.0249
+        "brier_conf_vs_correct": 0.02
       }
     }
   }
