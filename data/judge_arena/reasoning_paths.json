@@ -1,0 +1,298 @@
+[
+ {
+  "id": "002528_2025-04-30",
+  "gold": "B",
+  "text_len": 2504,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 11528,
+   "choice": "A",
+   "content_len": 31,
+   "think_len": 3449,
+   "think_norm": "Letmeanalyzethisannouncementcarefully.TheannouncementisaboutST英飞拓(Infinova)beingsubjectto\"叠加实施其他风险警示\"(additional/overlappingotherriskwarning).Theinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-Iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheonethatappearsearlierinthetext.Lookingatthetext:特别提示(SpecialNotes):1.2023年度-thecompanyreceivedanadverseopinion(无法表示意见)internalcontrolauditreport,andaccordingtorule9.8.1(4),thestockwasalreadysubjecttootherriskwarningonMay6,2024.ThisistheBACKGROUNDtrigger-内控被否(internalcontrolauditdisclaimed)-thisisCategoryA(治理/合规类).2.因公司最近三个会计年度扣除非经常性损益前后净利润孰低者均为负值，且2024年度被中兴华出具了带\"与持续经营相关的重大不确定性\"段落的保留意见的《审计报告》...根据第9.8.1条第（七）项规定，公司股票交易将被叠加实施其他风险警示。ThisistheCURRENTadditionaltrigger-netprofitnegativeforthreeconsecutiveyearsplusgoingconcernuncertaintyinauditopinion-thisisCategoryB(纯财务类).Sotheannouncementmentionsboth:-Backgroundtrigger(earlierintext):2023internalcontrolauditreportwithdisclaimerofopinion→CategoryA(治理/合规类-内控被否)-Currentadditionaltrigger:threeconsecutiveyearsofnegativenetprofit+goingconcern→CategoryB(纯财务类)Accordingtotheinstruction:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-taketheonethatappearsearlierinthetext.Thebackgroundtrigger(internalcontrolauditdisclaimer,2023)appearsfirstinthetext(特别提示point1),beforethecurrentadditionaltrigger(特别提示point2).SotheanswershouldbeA(治理/合规类-内控被否).Wait,letmereconsider.Thequestionasks\"触发戴帽的原因属于哪一类\"-whichcategorydoesthereasonforthe\"hat\"(STdesignation)belongto?Theannouncementisabout\"叠加实施其他风险警示\"(additionalriskwarning).ThebackgroundisthatthecompanywasalreadyST'dduetothe2023internalcontrolauditdisclaimer.Thecurrentadditionaltriggeristhefinancialindicators(threeyearsnegativenetprofit+goingconcern).Theinstructionexplicitlysays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheoneappearingearlierinthetext.Inthetext,thebackgroundtrigger(2023internalcontrolauditdisclaimer)appearsfirst(in特别提示point1andinsection二firstparagraph).Thecurrentadditionaltriggerappearssecond.SotheanswerisA-治理/合规类(内控被否).Confidence:Theinstructionisclear.Theearliertriggeristheinternalcontrolauditdisclaimer(无法表示意见的内控审计报告),whichfallsunderCategoryA(内控被否).SochoiceAwithhighconfidence,maybe0.9.Letmedouble-checkthecategories:-A=治理/合规类（内控被否·处罚·账户冻结·资金占用·违规担保）-Governance/compliance:internalcontrolrejected,penalties,accountfrozen,fundoccupation,illegalguarantees-B=纯财务类（净利润/净资产/收入指标）-Purefinancial:netprofit/netassets/revenueindicators-C=重整/破产-Reorganization/bankruptcy-E=生产经营类-Production/operationsseverelyaffected-D=Onlyrulecitationsoremptywords,nocleartriggerThebackgroundtrigger:无法表示意见的《内部控制审计报告》-disclaimerofopiniononinternalcontrolauditreport→thisis内控被否→CategoryA.Thecurrenttrigger:最近三个会计年度扣除非经常性损益前后净利润孰低者均为负值+保留意见审计报告带持续经营重大不确定性段落→thisisfinancial(netprofit)→CategoryB.Pertheinstruction,taketheearlierone→A.Confidence:0.9orso.Theinstructionisexplicitaboutthiscase.I'llgowith0.9.",
+   "anchors": [
+    "净利为负",
+    "重整破产",
+    "账户冻结",
+    "条款号"
+   ],
+   "ctok": 941
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 4393,
+   "choice": "A",
+   "content_len": 31,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 244
+  }
+ },
+ {
+  "id": "300125_2024-08-19",
+  "gold": "A",
+  "text_len": 1957,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 75610,
+   "choice": "",
+   "content_len": 0,
+   "think_len": 19085,
+   "think_norm": "Letmeanalyzethisannouncement.TheannouncementisaboutST聆达(LingdaGroup)receivinganadditional\"otherriskwarning\"(其他风险警示).Theannouncementmentions:1.Thecompanywasalreadyunderotherriskwarning(ST)duetorules9.4(1)(4)(6)-thisisbackground2.Thenew(叠加/superimposed)riskwarningisdueto:Thecompanyanditssubsidiaries,withoutperformingboardreviewproceduresanddisclosureobligations,illegallyprovidedguaranteeforaloancontractbetween中财招商投资集团商业保理有限公司and金寨嘉悦正丰新能源有限公司,involvingguaranteeamountof16millionyuan.Thisisaviolationofregulationsinprovidingexternalguarantee(违规担保).Therulecited:9.4(5):\"公司向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的\"-providingfundstocontrollingshareholderorrelatedparties,orprovidingexternalguaranteesinviolationofprocedureswithseriouscircumstances.Thequestionasks:whichcategorydoesthetriggerforthe\"戴帽\"(STdesignation)belongto?Options:A=Governance/compliance(internalcontrolrejected,penalties,accountfrozen,fundoccupation,illegalguarantees)B=Purefinancial(netprofit/netassets/revenueindicators)C=Reorganization/bankruptcyE=Production/operationsseriouslyaffectedandexpectednottorecoverwithin3monthsD=Onlyrulecitationsoremptywords,novisibletriggerThetriggerhereisclearly违规担保(illegalguarantee),whichfallsundercategoryA(governance/compliance).Theinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-Iftheannouncementmentionsboththebackgroundtriggerandthecurrentsuperimposedtrigger,taketheonethatappearsearlierinthetext.Hmm,thisisinteresting.Thebackgroundtrigger(alreadyimplementedSTdueto9.4(1)(4)(6))appearsfirstinthetext.Buttheannouncementdoesn'tspecifywhatthoseitems(1)(4)(6)are-itjustreferencestherulenumbers.Actually,letmecheckwhat9.4items(1)(4)(6)oftheChiNextlistingrulesare:9.4itemstypicallyinclude:(一)生产经营活动受到严重影响且预计三个月内不能恢复-production/operationsseriouslyaffected(二)主要银行账号被冻结-mainbankaccountsfrozen(三)董事会会议无法正常召开并形成决议-boardcannotconvene(四)向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重-fundstocontrollingshareholderorillegalguarantees(五)...Wait,actuallythenumberingmightdiffer.Letmethinkaboutthe2024revision.Intheannouncement,itsays9.4(5)is\"公司向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的\".Sointhe2024revision:(一)-probably生产经营活动受到严重影响(二)-主要银行账号被冻结(三)-董事会无法正常召开(四)-maybe资金占用?orsomethingelse(五)-向控股股东或关联人提供资金或违规担保(六)-maybe内控非标意见or连续三年亏损?Actuallyfor创业板9.4(其他风险警示):(一)生产经营活动受到严重影响且预计在三个月内不能恢复正常；(二)主要银行账号被冻结；(三)董事会会议无法正常召开并形成决议；(四)向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的；(五)...Hmm,buttheannouncementsays(五)istheguaranteeone.Sothenumberinginthe2024revisionmightbedifferent.Letmenotworryaboutexactnumbering.Thebackground:thecompanywasalreadySTdueto9.4(1)(4)(6).Thecurrentannouncementisaboutthesuperimposed(叠加)riskwarningdueto9.4(5)-illegalguarantee.Theinstructionsaystotaketheoneappearingearlierinthetextifbothbackgroundandcurrenttriggersarewritten.Thebackgroundtriggerappearsfirst:\"公司因触及《深圳证券交易所创业板股票上市规则》第九章风险警示中9.4条第（一）（四）（六）项，公司股票已被实施其他风险警示（ST）\"Butthebackgroundtriggeronlycitesrulenumbers(一)(四)(六)withoutdescribingwhattheyare.Hmm.Thequestionisabout\"触发戴帽的原因\"-thereasonfortheSTdesignation.Wait,letmere-readthequestion:\"这份「被实施风险警示」公告里，触发戴帽的原因属于哪一类？\"-Inthis\"riskwarningimplementation\"announcement,whichcategorydoesthetriggerfortheSTdesignationbelongto?Theinstruction:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementwritesboththebackgroundtriggerandthecurrentsuperimposedtrigger,taketheoneappearingearlierinthetext.Sothebackgroundtriggeris9.4(1)(4)(6).Thecurrenttriggeris9.4(5)-illegalguarantee(违规担保).Thebackgroundappearsearlier.Butwhatisthebackgroundtrigger?It'sjustrulecitations:9.4(1)(4)(6).Withoutknowingtherulecontent,wecan'ttellwhatcategoryitis.Butwait-theannouncementtitleis\"关于公司股票叠加实施其他风险警示事项的公告\"-aboutthesuperimposedimplementationofotherriskwarning.Hmm,theinstructionabouttakingtheearlierone...Thebackgroundtriggerismentionedfirst:\"触及9.4条第（一）（四）（六）项\".Ifweknowwhatthoseitemsare:For深交所创业板股票上市规则(2024年修订)9.4条:上市公司出现下列情形之一的，本所对其股票交易实施其他风险警示：(一)生产经营活动受到严重影响且预计在三个月内不能恢复正常；(二)主要银行账号被冻结；(三)董事会会议无法正常召开并形成决议；(四)向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的；(五)公司信息披露或者规范运作等方面存在重大缺陷...Hmmwait,buttheannouncementsays(五)istheguaranteeone.Letmereconsider.Actually,inthe2024revisionof创业板上市规则,thenumberingmayhavechanged.Letmethink:2023revision9.4:(一)生产经营活动受到严重影响且预计在三个月内不能恢复正常；(二)主要银行账号被冻结；(三)董事会会议无法正常召开并形成决议；(四)向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的；(五)公司最近一个会计年度的内部控制被出具无法表示意见或者否定意见的审计报告，或者未按照规定披露内部控制审计报告；(六)公司最近三个会计年度扣除非经常性损益前后净利润孰低者为负值，且最近一个会计年度审计报告显示公司持续经营能力存在不确定性；(七)...Hmm,buttheannouncementquotes9.4(五)as\"公司向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的\".Sointhe2024revision,theguaranteeitemis(五).Thatmeansthenumberingshifted-maybeanewitemwasinserted.2024revision9.4(afterthenew\"国九条\"reforms):(一)生产经营活动受到严重影响且预计在三个月内不能恢复正常；(二)主要银行账号被冻结；(三)董事会会议无法正常召开并形成决议；(四)最近一个会计年度的内部控制被出具无法表示意见或者否定意见的审计报告，或者未按照规定披露内部控制审计报告；？Hmm,actuallyI'mnotsureoftheexactnumbering.LetmethinkaboutwhatST聆达'soriginalSTreasonswere.ST聆达(聆达股份,300125):InApril2024,thecompanywasimplementedST.Lookingattheannouncement2024-046fromApril27,2024...Thecompany'ssubsidiary金寨嘉悦新能源hadproductionhalted(停产).Actually,Irecall聆达股份'ssolarcellbusinesshaltedproduction.TheSTreasonsincluded:-生产经营活动受到严重影响且预计3个月内不能恢复(productionhalted)-Maybe资金占用or违规担保?Actually,theannouncementsays9.4(1)(4)(6).Ifinthe2024revision:(一)生产经营活动受到严重影响且预计在三个月内不能恢复正常；(四)???(六)???Hmm,if(五)is违规担保/资金占用,then(四)mightbe内控非标意见and(六)mightbe持续经营能力不确定性(扣非净利润为负+持续经营不确定性).Actuallywait.Letmereconsider.The2024revisionoftheChiNextlistingrules(February2024?orApril2024).Theannouncementcites\"《深圳证券交易所创业板股票上市规则（2024年修订）》第9.4条第（五）项\"astheguaranteeprovision.Hmm,inthe2023revisionof深交所创业板上市规则,9.4was:上市公司出现下列情形之一的，本所可以对其股票交易实施其他风险警示：（一）生产经营活动受到严重影响且预计在三个月内不能恢复正常；（二）主要银行账号被冻结；（三）董事会会议无法正常召开并形成决议；（四）向控股股东或者其关联人提供资金或者违反规定程序对外提供担保且情形严重的；（五）公司最近一个会计年度的内部控制被出具无法表示意见或者否定意见的审计报告，或者未按照规定披露内部控制审计报告；（六）公司最近三个会计年度扣除非经常性损益前后净利润孰低者均为负值，且最近一个会计年度审计报告显示公司持续经营能力存在不确定性；（七）本所认定的其他情形。Inthe2024revision(April2024,after国九条),anewitemmighthavebeeninserted,e.g.,资金占用beingseparatedfrom违规担保?Actuallythe2024revisionsseparated\"向控股股东或者其关联人提供资金\"and\"违反规定程序对外提供担保\"intodifferentitems?Hmm.Actually,inthe2024revisionofthelistingrules(publishedApril30,2024),for主板9.8.1...Letmethink.The2024",
+   "anchors": [
+    "内控意见",
+    "净利为负",
+    "账户冻结",
+    "停产",
+    "条款号"
+   ],
+   "ctok": 6000
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 72085,
+   "choice": "",
+   "content_len": 0,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 6000
+  }
+ },
+ {
+  "id": "300225_2025-07-02",
+  "gold": "B",
+  "text_len": 1769,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 75657,
+   "choice": "",
+   "content_len": 0,
+   "think_len": 24016,
+   "think_norm": "Letmeanalyzethisannouncementabout金力泰(300225)beingsubjecttodelistingriskwarning(*ST)andotherriskwarning(ST).Theannouncementstates:1.退市风险警示(*ST)reason:Theauditor(中兴华会计师事务所)issueda\"无法表示意见\"(disclaimerofopinion)auditreportonthe2024annualfinancialstatements.Accordingtotherules,thistriggersdelistingriskwarning.2.其他风险警示(ST)reason:Theauditorissueda\"否定意见\"(adverseopinion)auditreportontheeffectivenessofinternalcontrolfor2024.Thistriggersotherriskwarning.Now,whichcategorydoesthisfallinto?Theoptionsare:A=治理/合规类(Governance/Compliance:internalcontroldisclaimed,penalties,accountfreezing,fundoccupation,illegalguarantees)B=纯财务类(Purefinancial:netprofit/netassets/revenueindicators)C=重整/破产(Reorganization/Bankruptcy)E=生产经营类(Production/operationsseverelyaffectedandexpectednottorecoverwithin3months)D=Onlyrulecitationsoremptywords,nodiscernibletriggerThetriggerhereis:1.Disclaimerofopiniononfinancialstatementsaudit(无法表示意见审计报告)2.Adverseopiniononinternalcontrolaudit(否定意见内部控制审计报告)Thequestionsays\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementmentionsbothbackgroundtriggerandthecurrentstackedtrigger,taketheoneappearingearlierinthetext.Inthisannouncement,thefirstreasonmentioned(Section一)isthedisclaimerofopiniononthefinancialstatementsaudit,whichtriggers退市风险警示(*ST).Thesecondreason(Section二)istheadverseopiniononinternalcontrol,whichtriggers其他风险警示(ST).Now,howtoclassify:-无法表示意见auditreportonfinancialstatements-thisisanauditopinionissue.Isthis\"纯财务类\"(B)or\"治理/合规类\"(A)?Lookingatthecategories:-Aincludes:内控被否(internalcontroldisclaimed/adverseopinion),处罚(penalties),账户冻结(accountfreezing),资金占用(fundoccupation),违规担保(illegalguarantees)-Bincludes:净利润/净资产/收入指标(netprofit/netassets/revenueindicators)Thedisclaimerofopiniononfinancialstatementsisnotafinancialindicatorissue(likenegativenetprofitornetassets).It'sanauditopinionissue.TheadverseopiniononinternalcontrolisexplicitlymentionedincategoryA(\"内控被否\").Thedisclaimerofopiniononthefinancialreportaudit-thisistypicallyrelatedtogovernance/complianceissuesbecauseitusuallyarisesfrominabilitytoverifytransactions,fundoccupation,etc.Inthiscase,thecontextmentions立案调查(investigationbyCSRC),战略备库资金(strategicreservefunds),预付款(prepaymentstosuppliers)-thesesuggestgovernanceissues.Actually,intheclassificationsystemusedhere:-无法表示意见/否定意见auditreportonfinancialstatements→thisisoftenclassifiedasauditopiniontype,whichrelatestofinancialreportingreliabilityissues.Hmm,butthecategoryBis\"纯财务类（净利润/净资产/收入指标）\"-purefinancialindicators.Thedisclaimerofopinionisnotafinancialindicatorissue.ThecategoryAis\"治理/合规类（内控被否·处罚·账户冻结·资金占用·违规担保）\"-theinternalcontroladverseopinion(内控被否)isexplicitlyincategoryA.Sothequestionis:doesthedisclaimerofopiniononthefinancialstatementsauditfallunderAorBorneither?Giventheinstruction\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-taketheearlieroneinthetext.Theearlieroneisthedisclaimerofopiniononfinancialstatements(Section一,退市风险警示).Butwait-thedisclaimerofopiniononfinancialstatements...Letmethinkabouthowthisclassificationsystemwouldtreatit.InChineseA-sharedelistingriskwarningrules:-财务类退市指标(financialdelistingindicators):includes净利润为负且营收低于1亿(negativenetprofitandrevenuebelow100million),净资产为负(negativenetassets),无法表示意见或否定意见审计报告(disclaimeroradverseopinionauditreport),etc.Actually,intheofficialclassificationofdelistingriskwarningreasons:-财务类(Financial):(1)netprofit+revenue,(2)netassets,(3)auditreporttype(无法表示意见/否定意见),(4)营收扣除后低于1亿...Wait,actuallytheauditopinionissue(无法表示意见或否定意见)isofficiallyclassifiedunder财务类强制退市intheexchangerules.Thefinancialdelistingcategoryincludes:1.净利润为负且营业收入低于1亿元2.期末净资产为负3.财务会计报告被出具无法表示意见或否定意见的审计报告4....Soundertheofficialclassification,thedisclaimerofopiniononfinancialstatementsisa财务类(financial)trigger.Butthequestion'scategoryBis\"纯财务类（净利润/净资产/收入指标）\"-itspecificallylistsnetprofit/netassets/revenueindicators,notauditopinions.Hmm,thisistricky.Thequestion'sBcategoryseemsnarrower-onlyfinancialindicators.Theauditopinionissueisn'tlistedinB'sparentheticalexamples.CategoryA'sexamples:内控被否(internalcontroladverseopinion),处罚(penalty),账户冻结,资金占用,违规担保.Theinternalcontroladverseopinion(否定意见内控审计报告)isclearly\"内控被否\"whichisinA.Thefinancialstatementdisclaimerofopinion(无法表示意见财务审计报告)-wheredoesitfit?Giventheclassificationoptions,Ithink:-Ifwetaketheearliertriggerinthetext:无法表示意见onfinancialstatements→thiscouldbeclassifiedas...hmm.Actually,letmereconsider.Thequestionasksabout\"触发戴帽的原因\"-thereasonforthehat(STdesignation).Theannouncementhastwotriggers:1.退市风险警示(*ST):无法表示意见financialauditreport2.其他风险警示(ST):否定意见internalcontrolauditreportTheinstructionsaystotaketheearlieroneinthetextifbothbackgroundandcurrenttriggersarementioned.Here,botharecurrenttriggers(bothfrom2024annualreports),notbackgroundvs.current.Buttheinstructionabout\"较早出现的那个\"(theearlierappearingone)wouldsuggesttakingthe*STreasonfirst:无法表示意见financialauditreport.Hmmwait,actuallyre-reading:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementwritesboththebackgroundtriggerandthecurrentstackedtrigger,taketheoneappearingearlierinthetext.Thisisaboutstackedwarnings(叠加).Inthiscase,theannouncementisabout退市风险警示叠加其他风险警示(delistingriskwarningstackedwithotherriskwarning).Sobothtriggersarepresent,andweshouldtaketheearlieroneinthetext.TheearlieroneinthetextisSection一:无法表示意见auditreporton2024financialstatements→退市风险警示.Now,howtoclassify\"无法表示意见审计报告\"(disclaimerofopiniononfinancialstatements)?OptionA:治理/合规类-includes内控被否(internalcontroldisclaimed).Thefinancialstatementdisclaimerisdifferentfrominternalcontroladverseopinionthough.OptionB:纯财务类（净利润/净资产/收入指标）-purefinancialindicators.Thedisclaimerofopinionisnotafinancialindicator.Hmm.InmanyclassificationschemesforSTreasons,theauditopiniontype(无法表示意见/否定意见onfinancialstatements)isgroupedunder财务类becauseit'spartofthefinancialdelistingindicatorsintheexchangerules.Butthisquestion'sBoptionspecificallysays\"净利润/净资产/收入指标\"whichexcludesauditopinions.Alternatively,thedisclaimerofopinionoftenarisesfromgovernanceissues(likefundoccupation,unverifiabletransactions),butthedirecttriggeristheauditopinionitself.Letmethinkaboutwhatthequestiondesignerintended.Thecategories:A=治理/合规类（内控被否",
+   "anchors": [
+    "净资产为负",
+    "净利为负",
+    "营收门槛",
+    "重整破产",
+    "账户冻结",
+    "条款号"
+   ],
+   "ctok": 6000
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 14742,
+   "choice": "B",
+   "content_len": 31,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 1403
+  }
+ },
+ {
+  "id": "600745_2026-04-30",
+  "gold": "B",
+  "text_len": 2498,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 44924,
+   "choice": "A",
+   "content_len": 31,
+   "think_len": 16543,
+   "think_norm": "Letmeanalyzethisannouncementabout闻泰科技(WingtechTechnology)beingsubjecttodelistingriskwarning(*ST).Thetriggerreasonsstatedintheannouncement:1.容诚会计师事务所issuedadisclaimerofopinion(无法表示意见)onthecompany's2025annualfinancialaccountingreport-thistriggers退市风险警示underArticle9.3.2(3)2.容诚issuedadisclaimerofopiniononthe2025internalcontrolauditreport-thistriggers其他风险警示underArticle9.8.1(3)Now,whichcategorydoesthisfallinto?Theoptionsare:A=治理/合规类（内控被否·处罚·账户冻结·资金占用·违规担保）-Governance/compliancetype(internalcontrolrejected,penalties,accountfrozen,fundoccupation,illegalguarantees)B=纯财务类（净利润/净资产/收入指标）-Purefinancialtype(netprofit/netassets/revenueindicators)C=重整/破产-Reorganization/bankruptcyE=生产经营类（生产经营活动受到严重影响且预计3个月内不能恢复）-Production/operationtypeD=正文里只有规则条文引用或空话，看不出触发原因-Onlyrulecitationsoremptywords,can'tseetriggerreasonThetriggerhereis:-Disclaimerofopiniononfinancialstatementsaudit(无法表示意见的审计报告)-Disclaimerofopiniononinternalcontrolaudit(无法表示意见的内部控制审计报告)Thedisclaimerofopiniononthefinancialreportitself-isthisa\"purefinancial\"category?TheoptionBsays\"净利润/净资产/收入指标\"(netprofit/netassets/revenueindicators)-thisisaboutfinancialperformanceindicators,notauditopinions.Adisclaimerofopinionisnotafinancialindicatorissue.Theinternalcontrolauditdisclaimer-thisfallsunder\"内控被否\"(internalcontrolrejected)whichisincategoryA.Thebackgroundmentioned:安世境内(NexperiaChina)hadaccountssealed/blockedinMarch2026(账号被封),whichcausedinformationsystem/datatransferissueslimitingauditscope.Thisrelatestotheaccountbeingfrozen-whichisalsocategoryA(账户冻结).Sothetriggers:1.Financialreportauditdisclaimer(无法表示意见)-thisisanauditopinionissue,notafinancialindicatorissue.Hmm,wheredoesthisfit?It'snotB(whichisspecificallyaboutnetprofit/netassets/revenueindicators).It'srelatedtoauditopinion.2.Internalcontrolauditdisclaimer-thisisclearly\"内控被否\"incategoryA.Theinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-Iftheannouncementmentionsbothbackgroundtriggerandthecurrentstackedtrigger,taketheonethatappearsearlierinthetext.Inthetext,thefirstmention(inthe重要内容提示-importantcontenttips):\"因容诚会计师事务所（特殊普通合伙）（以下简称\"容诚\"）对闻泰科技股份有限公司2025年度财务会计报告出具了无法表示意见的审计报告，对公司2025年度财务报告内部控制出具了无法表示意见的内部控制审计报告，触及《上海证券交易所股票上市规则》第9.3.2条第（三）项和第9.8.1条第（三）项规定情形\"Sobothtriggersappeartogether:financialreportdisclaimerANDinternalcontroldisclaimer.Thefirstonementionedisthefinancialreportauditdisclaimer.ButisthatcategoryB?CategoryBis\"纯财务类（净利润/净资产/收入指标）\"-purefinancial(netprofit/netassets/revenueindicators).Adisclaimerofopiniononthefinancialreportisnotaboutfinancialindicators-it'saboutauditscopelimitation.Hmm,thisistricky.Letmethinkabouttheclassificationsystem:-A=Governance/compliance:internalcontrolrejected,penalties,accountfrozen,fundoccupation,illegalguarantees-B=Purefinancial:netprofit/netassets/revenueindicators-C=Reorganization/bankruptcy-E=Production/operationseverelyaffected-D=Onlyrulecitations,novisibletriggerThedisclaimerofopiniononfinancialstatements-inthecontextofdelistingriskwarningrules(9.3.2),thetriggersinclude:(一)netprofitnegative+revenuebelowthreshold(二)netassetsnegative(三)auditreportwithdisclaimerofopinionorunabletoexpressopinion(四)auditreportwithadverseopinionon...Actually9.3.2(三)is:\"最近一个会计年度的财务会计报告被出具无法表示意见或者否定意见的审计报告\"-themostrecentfiscalyear'sfinancialreportreceivedadisclaimeroradverseopinionauditreport.Sothetriggeristheauditopiniontype.Thisisneitherapurefinancialindicator(B)norexactlyinternalcontrol(A).ButtheannouncementalsoincludestheinternalcontroldisclaimerwhichisclearlyA(内控被否).Giventheclassificationoptions,theauditdisclaimerissue...Letmethink.Thequestionaskswhichcategorythetriggerbelongsto.Theannouncementhastwotriggers:1.Financialreportauditdisclaimer→退市风险警示(*STpart)2.Internalcontrolauditdisclaimer→其他风险警示(STpart,stacked)Theinstructionsaysifbothbackgroundtriggerandcurrentstackedtriggerarewritten,taketheearlieroneinthetext.Inthetext,thefinancialreportdisclaimerappearsfirst(bothinthesummaryandinSection2).Butwait-isthefinancialreportdisclaimera\"backgroundtrigger\"or\"currentstackedtrigger\"?Theinstructionseemstodistinguishbetween\"背景触发\"(backgroundtrigger)and\"本次叠加的触发\"(thistime'sstackedtrigger).Hmm,actuallyinthisannouncement,bothtriggersaresimultaneous(bothfromthe2025annualaudit).The退市风险警示(delistingriskwarning)isthemainone,andthe其他风险警示is\"叠加\"(stacked/overlaid).Sothe\"本次叠加的触发\"wouldbetheinternalcontroldisclaimer(leadingto其他风险警示),andthemaintriggerwouldbethefinancialreportdisclaimer(leadingto退市风险警示).Actually,re-reading:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementwritesboththebackgroundtriggerandthecurrentstackedtrigger,taketheearlieroneinthetext.Inthiscase,thefinancialreportdisclaimerappearsfirstinthetext.Soweshouldclassifybasedonthefinancialreportauditdisclaimer.Now,whichcategorydoesafinancialreportauditdisclaimerfallinto?-Bis\"纯财务类（净利润/净资产/收入指标）\"-specificallyaboutfinancialindicators.AdisclaimerofopinionisNOTafinancialindicatorissue.-Aincludes\"内控被否\"(internalcontrolrejected)-theinternalcontrolauditdisclaimerfitshere.Hmm,butthefinancialreportauditdisclaimer...it'saboutauditopinion,whichcouldbeconsideredrelatedtogovernance/complianceissues(theunderlyingreasonwastheaccountbeingsealedandinformationsystemissuesatNexperiaChina-whichisacompliance/governancematter).Actually,letmereconsider.Thebackground:安世境内(NexperiaChina)haditsaccountssealed(账号被封)inMarch2026,whichcausedinformationsystemanddatatransferobstacles,limitingtheauditscope.Thisiswhytheauditorissuedadisclaimer.Theaccountbeingfrozen/sealed(账户冻结)isexplicitlylistedincategoryA!Sotheunderlyingcauseis:-Accountsealed(账户冻结)→categoryA-Internalcontrolauditdisclaimer(内控被否)→categoryA-Financialreportauditdisclaimer→thisisanauditopinionissueThefinancialreportauditdisclaimerdoesn'tfitneatlyintoB(whichisaboutfinancialindicatorslikenetprofit,netassets,revenue).It'smoreofanaudit/governanceissue.Giventheoptions,IthinkAisthebestanswerbecause:1.Theinternalcontrolauditdisclaimerisexplicitly\"内控被否\"inA2.Theunderlyingbackgroundinvolvesaccountfreezing(账户冻结)inA3.Thefinancialreportdisclaimerisnota\"purefinancialindicator\"issue(B)Butwait,theinstructionabouttakingtheearliertrigger...Th",
+   "anchors": [
+    "内控意见",
+    "财报意见",
+    "重整破产",
+    "账户冻结",
+    "停产",
+    "条款号"
+   ],
+   "ctok": 3965
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 8428,
+   "choice": "A",
+   "content_len": 31,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 536
+  }
+ },
+ {
+  "id": "603557_2024-04-27",
+  "gold": "B",
+  "text_len": 2659,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 69909,
+   "choice": "",
+   "content_len": 0,
+   "think_len": 24130,
+   "think_norm": "Letmeanalyzethisannouncementcarefully.Theannouncementisfrom起步股份有限公司(ST起步)abouttheirstockbeingsubjectto\"叠加实施其他风险警示\"(additionalotherriskwarning).Thequestionasks:whatcategorydoesthetriggerforthe\"戴帽\"(STdesignation)belongto?Options:A=治理/合规类(Governance/Compliance-internalcontrolnegated,penalties,accountfrozen,fundoccupation,illegalguarantees)B=纯财务类C=重整/破产E=生产经营类D=Onlyrulecitationsoremptywords,novisibletriggerTheinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-Iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheonethatappearsearlierinthetext.Letmelookatthestructureoftheannouncement:The\"重要内容提示\"(Importantcontenthighlights)section:1.Firstmentions:北京亚泰国际会计师事务所issueda无保留意见withemphasisparagraph(带强调事项段的无保留意见)internalcontrolauditreportfor2023,sothecompanywillcontinuetobesubjecttootherriskwarning(将继续被实施其他风险警示).2.Secondmentions:Thecompany'slastthreeconsecutiveaccountingyearshadnegativenetprofit(beforeandafterdeductingnon-recurringgains/losses),and北京亚泰所issueda保留意见forthe2023financialreport,involvingaccountsreceivablecreditimpairment,andtheauditreportshowsthecompany'sgoingconcernabilityhassignificantuncertainty.Accordingtorule9.8.1(6),thestockwillbesubjecttoadditionalotherriskwarningfromApril29,2024.Sointhehighlightssection,thefirstitemisaboutcontinuingtheriskwarning(duetointernalcontrolauditreportwithemphasisparagraph),andtheseconditemisabouttheadditionalriskwarning(duetofinancialindicators-negativenetprofitfor3consecutiveyears+qualifiedopiniononfinancialreport+goingconcernuncertainty).Wait,butthequestionisabout\"触发戴帽的原因\"-thereasonfortriggeringtheSTdesignation.Theannouncementisabout\"叠加实施其他风险警示\"(additional/overlappingimplementationofotherriskwarning).Theinstructionsaysiftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheonethatappearsearlierinthetext.Letmetracethroughthetext:Inthe重要内容提示:-Firstbullet:北京亚泰所issued带强调事项段的无保留意见internalcontrolauditreportfor2023,companywillcontinuetobesubjecttootherriskwarning.-Secondbullet:3consecutiveyearsnegativenetprofit+保留意见auditreport+goingconcernuncertainty→叠加实施其他风险警示perrule9.8.1(6).ThenSection一(被继续实施其他风险警示的基本情况):-Background:2020internalcontrolgot否定意见duetoviolationsrelatedtorelated-partyfundtransactionsandexternalguaranteesnotbeingdisclosedtimely,plussealmanagementissues.StockwasST'dfromApril30,2021.-Progress:fundoccupationrecovered,illegalguaranteesresolved,sealmanagementstrengthened,2021gotstandardunqualifiedopinion,2022gotunqualifiedwithemphasis,2023gotunqualifiedwithemphasis→willcontinuetobeST'd.Section二(公司股票被叠加实施其他风险警示的情况说明):-3consecutiveyearsnegativenetprofit+保留意见auditreport+goingconcernuncertainty→additionalriskwarningperrule9.8.1(6).Sotheannouncementcovers:1.Thecontinuationoftheoriginalriskwarning(backgroundtrigger:internalcontrolissues-governance/compliancetypeA)2.Thenewadditionalriskwarning(currenttrigger:financialindicators-typeB)Theinstructionsaystotaketheonethatappearsearlierinthetext(较早出现的那个).Inthe重要内容提示,thefirstbulletisabouttheinternalcontrolauditreport(continuingriskwarning).Thisisthebackground/originaltrigger.Hmm,butwait.Letmethinkaboutwhat\"触发戴帽的原因\"meanshere.Theannouncementtitleis\"关于股票被叠加实施其他风险警示的公告\"-aboutthestockbeingsubjecttoADDITIONALotherriskwarning.Thequestionasksaboutthetriggerforthe戴帽inthisannouncement.Sincetheannouncementisabouttheadditionalriskwarning,theprimarytriggerwouldbethefinancialindicators(3consecutiveyearsnegativenetprofit+qualifiedauditopinion+goingconcernuncertainty)-whichistypeB.Buttheinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheoneappearingearlierinthetext.Sothebackgroundtriggeristheinternalcontrolissue(2020negativeopiniononinternalcontrol,fundoccupation,illegalguarantees-typeAgovernance/compliance),andthecurrentadditionaltriggeristhefinancialindicators(typeB).Whichappearsearlierinthetext?Inthe重要内容提示:1.Firstbullet:internalcontrolauditreportwithemphasisparagraph→continueriskwarning(thisrelatestothebackground/continuation)2.Secondbullet:financialindicators→additionalriskwarningSotheinternalcontrolissueappearsfirst.Hmm,butwait.Thefirstbulletinthehighlightsisaboutthe2023internalcontrolauditreport(带强调事项段的无保留意见),whichisthereasonforCONTINUINGtheriskwarning.Theoriginalbackgroundtrigger(describedinSection一)wasthe2020negativeinternalcontrolopinionduetofundoccupationandillegalguarantees.Actually,letmere-readthequestion:\"这份「被实施风险警示」公告里，触发戴帽的原因属于哪一类？\"-Inthis\"riskwarningimplementation\"announcement,whatcategorydoesthetriggerfortheSTdesignationbelongto?Theinstruction:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-Iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheonethatappearsearlierinthetext.Soweneedtoidentify:-Backgroundtrigger:TheoriginalreasonforbeingST'd(internalcontrolissues-fundoccupation,illegalguarantees,negativeinternalcontrolopinion)-TypeA-Currentadditionaltrigger:ThenewreasonfortheadditionalST(financialindicators)-TypeBTheoneappearingearlierinthetext:Inthe重要内容提示:-Firstbullet:2023internalcontrolauditreportwithemphasisparagraph→continueriskwarning-Secondbullet:financialindicators→additionalriskwarningThefirstbulletmentionstheinternalcontrolauditreport.Thisisaboutthecontinuationoftheriskwarning,whichstemsfromtheoriginalinternalcontrolissues.Actually,hmm.The2023internalcontrolauditreportis带强调事项段的无保留意见.Undertherules,doesanunqualifiedopinionwithemphasisparagraphtriggerriskwarning?Letmethink...Actually,undertheSSElistingrules,theinternalcontrolauditreportbeing否定意见or无法表示意见triggersotherriskwarning.Anunqualifiedopinionwithemphasisparagraphdoesn'titselftriggerit.Butthecompanysays\"公司将继续被实施其他风险警示\"-thecompanywillCONTINUEtobesubjecttootherriskwarning.ThisisbecauseonceST'd,theriskwarningremainsuntiltheissuesareresolved.The2023reportstillhasemphasisparagraph,sotheriskwarningcontinues.Wait,actually,letmereconsider.TheoriginalSTwastriggeredbythe2020negativeinternalcontrolopinion.FortheSTtoberemoved,thecompanyneedstoshowtheissuesareresolved.The2021reportwasstandardunqualified,b",
+   "anchors": [
+    "内控意见",
+    "财报意见",
+    "净利为负",
+    "重整破产",
+    "账户冻结",
+    "条款号"
+   ],
+   "ctok": 6000
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 20173,
+   "choice": "A",
+   "content_len": 32,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 821
+  }
+ },
+ {
+  "id": "603023_2024-04-30",
+  "gold": "B",
+  "text_len": 2099,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 3832,
+   "choice": "B",
+   "content_len": 32,
+   "think_len": 481,
+   "think_norm": "Theannouncementisabout威帝股份(603023)beingsubjecttodelistingriskwarning(*ST).Thetrigger:2023auditednetprofit(beforeandafterdeductingnon-recurringitems)isnegative,andrevenueafterdeductingnon-recurring/non-businessincomeisbelow100millionyuan.Thisisapurefinancialindicatortrigger(netprofitnegative+revenuebelow1billion...actually1亿元=100million).ThisfallsundercategoryB=纯财务类（净利润/净资产/收入指标）.Answer:B,confidencehigh~0.98.",
+   "anchors": [],
+   "ctok": 138
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 3599,
+   "choice": "B",
+   "content_len": 32,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 90
+  }
+ },
+ {
+  "id": "002598_2026-05-09",
+  "gold": "A",
+  "text_len": 1607,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 9220,
+   "choice": "A",
+   "content_len": 32,
+   "think_len": 2807,
+   "think_norm": "Letmeanalyzethisannouncement.TheannouncementisfromChinaChengxinInternationalCreditRatingCo.,Ltd.aboutShandongZhanggu(山东省章丘鼓风机股份有限公司).Keypoints:1.Thecompany's2025internalcontrolauditreportwasgivenanadverseopinion(否定意见)bytheauditor.2.Thereason:AccordingtotheCSRCShandongbureau'sadministrativepenaltydecision,thecompanyrecordedfictitiousrepairfeesandtechnicalservicefeesin2024,leadingtofalserecordsinthe2024annualreport,whichwascorrected.3.TheinternalcontrolsoversalesexpensesandmanagementexpenseshadmajordefectsasofDec31,2025.4.AccordingtoShenzhenStockExchangeListingRulesArticle9.8.1(4),thestockwillbesubjectto\"otherriskwarning\"(其他风险警示)-thisistheruleaboutinternalcontrolauditreportbeinggivenadverse/disclaimeropinion.5.Previously,duetofalserecordsin2024annualreportfinancialindicators,thestockwasalreadysubjecttootherriskwarningstartingApril8,2026.Thistime,theadditional(叠加)otherriskwarningstartsApril29,2026.Thequestionasks:whichcategorydoesthetriggerforthe\"hat\"(riskwarning)belongto?Options:A=Governance/Compliance(internalcontrolnegated,penalty,accountfrozen,fundoccupation,illegalguarantee)B=Purefinancial(netprofit/netassets/revenueindicators)C=Reorganization/bankruptcyE=Production/operationseverelyaffectedD=Onlyrulecitationsoremptywords,notriggervisibleThetriggerhereis:-Theinternalcontrolauditreportwasgivenanadverseopinion(否定意见)-thisisclearlycategoryA(内控被否).-Alsothebackground:2024annualreporthadfalserecords(虚假记载)duetofictitiousexpenses,leadingtoadministrativepenalty-thisisalsogovernance/compliancerelated.Theinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheonethatappearsearlierinthetext.Inthetext,theearliermentionistheinternalcontrolauditreportbeinggivenanadverseopinion(否定意见的内部控制审计报告)-whichiscategoryA.Thebackgroundtrigger(2024falserecordsleadingtootherriskwarningfromApril8)isalsomentionedlater.BotharecategoryAanyway.Actually,letmere-read.Thetitlementions\"被出具否定意见的内部控制审计报告、股票交易被叠加实施其他风险警示和可能被实施退市风险警示\"-adverseinternalcontrolauditopinion,stocksubjecttoadditionalotherriskwarning,andpossibledelistingriskwarning.Thefirstsubstantivetriggerdescribedinthetextistheadverseinternalcontrolauditopinion(内控被否),whichiscategoryA.Thebackgroundtrigger(2024falserecords)isalsocompliance-related(虚假记载,administrativepenalty)-alsocategoryA.SotheanswerisA,withhighconfidence.Confidence:0.95orso.",
+   "anchors": [
+    "条款号"
+   ],
+   "ctok": 654
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 8037,
+   "choice": "A",
+   "content_len": 32,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 272
+  }
+ },
+ {
+  "id": "000615_2023-04-29",
+  "gold": "B",
+  "text_len": 2833,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 10292,
+   "choice": "B",
+   "content_len": 31,
+   "think_len": 2690,
+   "think_norm": "Letmeanalyzethisannouncementabouttheriskwarningimplementationfor奥园美谷(AoyuanMeigu).Theannouncementliststheapplicablesituationsfortheriskwarning:1.依据公司2022年年度报告，公司2022年度经审计的期末净资产为负值-Thisisapurefinancialindicator(netassetsnegative)-CategoryB(纯财务类)2.中审众环会计师事务所对公司2022年度财务报告出具了无法表示意见的审计报告-Thisisanauditopinionissue(无法表示意见)-thisrelatestofinancialreportingbutismoreofanauditopinioncategory.Intheclassificationschemegiven,thiscouldbeconsidered...Letmethink.Thecategoriesare:-A=治理/合规类（内控被否·处罚·账户冻结·资金占用·违规担保）-B=纯财务类（净利润/净资产/收入指标）-C=重整/破产-E=生产经营类-D=正文里只有规则条文引用或空话Thefirsttriggermentionedinthetextis:2022年度经审计的期末净资产为负值(negativenetassets)-thisisclearlyapurefinancialindicator(净资产指标),whichfallsunderCategoryB.Thesecondtriggeristheauditopinion(无法表示意见)-thisisnotexplicitlylistedineitherAorB.The无法表示意见auditreportistypicallyclassifiedasafinancial-relatedissuebutnotapurefinancialindicator.However,inthegiventaxonomy,itdoesn'tfitneatly.Thethirdtriggeris内控被否(internalcontrolnegativeopinion)-thisisCategoryA(治理/合规类).Thefourthtriggeris连续三个会计年度净利润为负值且持续经营能力存在不确定性-thisisfinancial(净利润指标)-CategoryB.Theinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementmentionsbothbackgroundtriggerandthecurrentstackedtrigger,taketheonethatappearsearlierinthetext.Theearliesttriggerinthetextis:\"公司2022年度经审计的期末净资产为负值\"-negativenetassets,whichisapurefinancialindicator(CategoryB).SotheanswershouldbeB.Wait,letmere-readthequestion.Thequestionasksabout\"触发戴帽的原因\"-thereasonforthe\"hat\"(STdesignation).Theannouncementmentionsmultipletriggers:1.Netassetsnegative(退市风险警示*ST)-B2.Unabletoexpressopinionauditreport(退市风险警示*ST)-thisisauditopinion,notinthelistedcategoriesexplicitly3.Internalcontrolnegativeopinion(其他风险警示ST)-A4.Threeconsecutiveyearsofnegativenetprofit+goingconcernuncertainty(其他风险警示ST)-BThefirstoneappearinginthetextisthenegativenetassets,whichisCategoryB(纯财务类-净资产指标).SotheanswerisBwithhighconfidence.Actually,letmereconsider.Thequestionsays\"触发戴帽的原因属于哪一类\"-whichcategorydoesthereasonforthehatbelongto.Sincetheannouncementlistsmultiplereasons,andtheinstructionsaystotaketheearliestonementionedinthetext,theearliestisthenegativenetassets(净资产为负值),whichisclearlyB(纯财务类).Confidence:0.9orso.Thefirsttriggerisclearlyafinancialindicator(netassetsnegative).Letmesetconfidenceat0.9.",
+   "anchors": [
+    "财报意见",
+    "净资产为负",
+    "净利为负",
+    "重整破产",
+    "账户冻结"
+   ],
+   "ctok": 742
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 3566,
+   "choice": "B",
+   "content_len": 31,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 112
+  }
+ },
+ {
+  "id": "002021_2023-11-25",
+  "gold": "C",
+  "text_len": 3000,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 19044,
+   "choice": "C",
+   "content_len": 32,
+   "think_len": 4032,
+   "think_norm": "Thequestionasksaboutthereasonforthe\"riskwarning\"(戴帽/ST)inthisannouncement.Theannouncementisaboutthecourtacceptingthecompany'sreorganization(重整)application,whichtriggersanadditionaldelistingriskwarning(叠加实施退市风险警示)underrule9.4.1(7).Theannouncementmentions:1.Thecourtacceptedthereorganizationapplicationon2023-11-242.Thestockwillbesubjecttoadditionaldelistingriskwarningstarting2023-11-27perrule9.4.1(7)3.Italsomentionsthestockwasalreadyunderdelistingriskwarningandotherriskwarning(fromApril28,2023announcement)Theinstructionsays:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-Iftheannouncementmentionsboththebackgroundtriggerandthecurrentadditionaltrigger,taketheonethatappearsearlierinthetext.Wait,letmere-read.Thebackgroundtrigger:\"公司股票交易已被实施退市风险警示及其他风险警示处理\"-thestockwasalreadyunderdelistingriskwarningandotherriskwarning.Thereasonfortheoriginalwarningisn'tdetailedhere(itreferencesanotherannouncement2023-031).Thecurrenttrigger:courtacceptingreorganization→additionaldelistingriskwarningperrule9.4.1(7).Thequestionasks:\"触发戴帽的原因属于哪一类？\"-whichcategorydoesthetriggerforthehat(STdesignation)belongto?Themainsubjectofthisannouncementisthecourtacceptingthereorganization,whichtriggerstheadditionaldelistingriskwarning.ThisiscategoryC=重整/破产.Butwait,theinstructionabout\"背景触发与本次叠加的触发\"-ifbothbackgroundandcurrentadditionaltriggersarementioned,taketheearlieroneinthetext.Inthetext,thefirstmentionisinthe特别提示section:1.Courtacceptedreorganization(point1)2.Courtdesignatedadministrator(point2)3.Stockalreadyunderdelistingriskwarningandotherriskwarning(point3)-background4.Duetocourtacceptingreorganization,stockwillbesubjecttoadditionaldelistingriskwarningper9.4.1(7)(point4)Hmm,theearlierappearingone...Point1mentionsthecourtacceptingreorganization.Point3mentionsthestockwasalreadyunderwarnings(background).Point4mentionstheadditionalwarningduetoreorganization.Actually,the\"背景触发\"(backgroundtrigger)wouldbethereasonthestockwasalreadyunderwarning(fromtheAprilannouncement-whichwedon'tknowthereasonfromthistext,itjustreferencesanotherannouncement).The\"本次叠加的触发\"(currentadditionaltrigger)isthereorganizationacceptance.Theinstructionsaystotaketheearlierappearingoneinthetext.Point1(reorganizationacceptance)appearsbeforepoint3(backgroundwarningmention).Butactually,thebackgroundtriggerreasonisn'tstatedinthistext-itjustsaysthestockwasalreadyunderwarnings,referencinganotherannouncement.Hmm,butthequestionisabout\"触发戴帽的原因\"-thereasonfortriggeringthehat.Themaincontentofthisannouncementisaboutthereorganizationacceptanceleadingtoadditionaldelistingriskwarning.ThisisclearlycategoryC(重整/破产).Thebackgroundmention(point3)doesn'tspecifythereason-itjustreferencesanotherannouncement.Sotheidentifiabletriggerinthistextisthereorganizationacceptance,whichisC.Actually,letmethinkabouttheinstructionmorecarefully:\"若公告同时写了背景触发与本次叠加的触发，取正文中较早出现的那个\"-iftheannouncementwritesboththebackgroundtriggerandthecurrentadditionaltrigger,taketheoneappearingearlierinthetext.Inthe特别提示:-Point1:courtacceptedreorganization(thisisthecurrentadditionaltrigger)-Point3:stockalreadyunderwarnings(background,butreasonnotspecified-justreferencesannouncement2023-031)-Point4:additionalwarningduetoreorganizationper9.4.1(7)Thebackgroundtriggerreasonisnotactuallystatedinthistext.Sotheonlyidentifiabletriggeristhereorganization,whichisC.Evenifweconsidertheorder,point1(reorganization)appearsbeforepoint3(background).SotheanswerwouldbeCanyway.TheanswerisC=重整/破产,withhighconfidence,like0.95.",
+   "anchors": [
+    "重整破产",
+    "条款号"
+   ],
+   "ctok": 939
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 7251,
+   "choice": "C",
+   "content_len": 32,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 169
+  }
+ },
+ {
+  "id": "600165_2024-04-03",
+  "gold": "E",
+  "text_len": 1583,
+  "glm-5.3": {
+   "http": 200,
+   "ms": 4030,
+   "choice": "E",
+   "content_len": 32,
+   "think_len": 480,
+   "think_norm": "Theannouncementisabout宁科生物(NingkeBiological)beingsubjectto\"otherriskwarning\"(ST).Thereason:itsimportantholdingsubsidiary中科新材hasbeenintemporaryshutdownsinceFeb7,2024,andduetoliquidityproblems,cannotresumenormalproductionwithinonemonth.Therulecited:9.8.1(四)\"公司生产经营活动受到严重影响且预计在3个月内不能恢复正常\"—production/operationsseverelyaffectedandnotexpectedtorecoverwithin3months.SothecategoryisE=生产经营类.Confidence:veryhigh,0.98.",
+   "anchors": [
+    "停产",
+    "条款号"
+   ],
+   "ctok": 140
+  },
+  "kimi-k3": {
+   "http": 200,
+   "ms": 3068,
+   "choice": "E",
+   "content_len": 32,
+   "think_len": 0,
+   "think_norm": "",
+   "anchors": [],
+   "ctok": 66
+  }
+ }
+]

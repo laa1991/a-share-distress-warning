@@ -183,22 +183,22 @@
     },
     "llm_baseline_recorded": null,
     "judge": {
-      "opencode-kimi-k3": {
-        "n": 120,
-        "ok": 120,
-        "ms_p50": 2986.3,
-        "ms_p95": 10950.9,
-        "ptok_sum": 178364,
-        "ctok_sum": 31858,
-        "answered": 120,
-        "answered_share": 1.0,
-        "multi_value_share": 0.0333,
-        "gold_n": 120,
-        "accuracy_on_answered": 0.9583,
-        "accuracy_all_counting_blank_as_wrong": 0.9583,
+      "opencode-glm-5.3": {
+        "n": 41,
+        "ok": 41,
+        "ms_p50": 5546.8,
+        "ms_p95": 28736.4,
+        "ptok_sum": 62654,
+        "ctok_sum": 27209,
+        "answered": 40,
+        "answered_share": 0.9756,
+        "multi_value_share": 0.1,
+        "gold_n": 40,
+        "accuracy_on_answered": 0.975,
+        "accuracy_all_counting_blank_as_wrong": 0.9512,
         "conf_median": 0.98,
-        "uncertain_band_share": 0.0417,
-        "brier_conf_vs_correct": 0.032
+        "uncertain_band_share": 0.0,
+        "brier_conf_vs_correct": 0.0249
       }
     }
   }

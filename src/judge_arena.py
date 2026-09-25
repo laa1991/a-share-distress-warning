@@ -41,13 +41,21 @@ PROMPTS = {
     "st_reason": {
         "primitive": "choice",
         "question": "这份「被实施风险警示」公告里，触发戴帽的原因属于哪一类？选项："
-                    "A=治理/合规类（内控被否·处罚·账户冻结·资金占用·违规担保）"
-                    "B=纯财务类（净利润/净资产/收入指标 · 「连续三年扣非孰低为负 + 持续经营存在不确定性」这一族也算）"
+                    "A=治理/合规类（内控审计报告被否/无法表示意见·处罚·账户冻结·资金占用·违规担保）"
+                    "B=纯财务类（净利润为负/扣除后营收不达标 · 期末净资产为负 · **对财务报表出具的无法表示意见或否定意见**"
+                    " · 「连续三年扣非孰低为负 + 持续经营存在不确定性」这一族也算）"
                     "C=重整/破产 "
                     "E=生产经营类（生产经营活动受到严重影响且预计 3 个月内不能恢复 · 主要业务停产）"
                     "D=正文里只有规则条文引用或空话，看不出触发原因 "
                     "?=读完全文仍判不了。"
-                    "⚠️ 若公告同时写了背景触发与本次叠加的触发，取**正文中较早出现的那个**（多值在理由里标 `+另:X`）。",
+                    "⚠️ 若公告同时写了**背景触发**与**本次实施**的触发，取**本次实施事件（本次叠加/本次被实施）的触发**；"
+                    "正文里写明「前期已实施」「已被实施」的旧原因**不取**。若指不出哪条是本次的，才退回到「取正文中较早出现的那个」。"
+                    "（多值在理由里标 `+另:X`。）",
+        # ⚠️ 2026-09-25 10:5x 两处口径修正（**我自己的 own-goal，见文档 §11.9**）：
+        #   ① 原 B 定义只写了「净利润/净资产/收入指标」，**漏了「财报被出具非标意见」**——
+        #      而 gold 读者用的定义里含这一条 ⇒ 两条把 gold=B 的题判成 A（模型的 trace 里逐字说着"B 只含财务指标，不含审计意见"）。
+        #   ② 原规则只写「取正文中较早出现的那个」⇒ 在"前期已实施 + 本次叠加"的公告上会指向**旧原因**，
+        #      而 gold 读者用的是**本次实施事件**的口径 ⇒ 002528 被判成 A（trace 里逐字引用了我这条规则）。
         # ⚠️ E 不是我编的档：它是交易所规则里**与 A、B 并列的第三条触发**（「生产经营活动受到严重影响…」），
         #    实测 600165（子公司临时停产）· 688089（生产经营受严重影响）两条原本被硬塞在 A/B/C 之外。
         "schema": {"choice": "A|B|C|D|E", "probability": {"A": "0..1", "B": "0..1", "C": "0..1",
@@ -347,6 +355,7 @@ def main() -> int:
     ap.add_argument("--task", default="", help="只跑一个任务（st_reason / rev_dir）；空 = 两个都跑")
     ap.add_argument("--limit", type=int, default=0, help="判断器只跑前 N 道（0 = 全跑）")
     ap.add_argument("--ids-file", default="", help="只跑这个文件里列出的 id（补跑弃答/失败用）")
+    ap.add_argument("--out-tag", default="", help="输出文件名后缀（**改过题面之后必须带上**，否则会与旧读数混在一张表里）")
     ap.add_argument("--n", type=int, default=120)
     args = ap.parse_args()
     OUT.mkdir(parents=True, exist_ok=True)
@@ -383,7 +392,7 @@ def main() -> int:
             print(f"\n[judge] {args.judge}{' · ' + args.model if args.model else ''} · 跑 {len(run)} 道…", flush=True)
             res = call_judge(run, task, args.judge, args.model)
             tag = f"{args.judge}-{args.model or 'default'}".replace("/", "_")
-            out_csv = OUT / f"{task}_judge_{tag}{'-refill' if args.ids_file else ''}.csv"
+            out_csv = OUT / f"{task}_judge_{tag}{'-' + args.out_tag if args.out_tag else ''}.csv"
             res.to_csv(out_csv, index=False, encoding="utf-8-sig")
             sc = score_judge(res, task, cases)
             print(f"[judge] {task} 读数：{sc}")
