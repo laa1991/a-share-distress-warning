@@ -1,0 +1,15 @@
+{
+  "n": 120,
+  "majority_baseline": 0.5333,
+  "acc_mean": 0.6583,
+  "acc_sd": 0.0312,
+  "macro_f1_mean": 0.3573,
+  "max_prob_median": 0.995,
+  "uncertain_band_share": 0.1417,
+  "feature_count": 69,
+  "seeds": [
+    0,
+    1,
+    2
+  ]
+}
